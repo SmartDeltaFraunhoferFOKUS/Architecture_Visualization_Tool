@@ -1,8 +1,16 @@
-# Architecture_visualization_tool
+### Architecture visualization tool
 
 The repo contains the initial version of the Architectural visualization tool.  
-The tool in its current iteration reads ceps or log file to generate state diagrams or the sequence diagrams.
 
-To run the app:
+The app will compute necessary visualization data and populate it in the mysql backend.
 
-- [ ] python main.py -i "<ceps_file_location> | <log_file_location>"
+Please follow the following steps to setup and get the app running:
+
+1. Configure the database using the [config.yaml](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/data_population_tool/config/dash_config.yaml) file.
+
+1. *For first time run*, setup the required database and tables by running the [CREATE_schema_tables.sql](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/data_population_tool/db_scripts/CREATE_schema_tables.sql) script in the *./data_population_tool/db_scripts*
+
+2. Run the app as:
+ `` python main.py -i "<folder_location>" ``
+
+For subsequent runs, skip step 1 since database is already created.

@@ -19,9 +19,9 @@
 -- Table structure for table `tbl_ex_fileinfo`
 --
 
---CREATE schema smartdelta__pcd;
+CREATE schema smartdelta__pcd;
 
---USE smartdelta__pcd;
+USE smartdelta__pcd;
 
 DROP TABLE IF EXISTS `tbl_ex_fileinfo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
