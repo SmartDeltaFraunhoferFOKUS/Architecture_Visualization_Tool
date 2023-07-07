@@ -4,7 +4,8 @@ The Dashboard uses the data populated by the [Data population tool](https://gith
 
 Pre-requisites before running the app:
 1. Populate necessary data using the [Data population tool](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/tree/master/data_population_tool)   
-However, if you want to run the Visualization with pre-populated data and without having to run the Data population tool please run the [smartdelta__pcd_restore_all.sql](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/data_population_tool/db_scripts/complete_data_backup/smartdelta__pcd_restore_all.sql) script. This will completely create a pre-populated database called **SmartDelta__PCD ** in the mysql db.
+
+However, if you want to run the Visualization with pre-populated data and without having to run the Data population tool, please run the [smartdelta__pcd_restore_all.sql](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/data_population_tool/db_scripts/complete_data_backup/smartdelta__pcd_restore_all.sql) script. This will completely create a pre-populated database called **SmartDelta__PCD ** in the mysql db.
 
 2. A running mysql instance with populated data (see step 1).
 
