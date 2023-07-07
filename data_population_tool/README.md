@@ -1,4 +1,4 @@
-### Architecture visualization tool
+# Architecture visualization tool
 
 The repo contains the initial version of the Architectural visualization tool.  
 
