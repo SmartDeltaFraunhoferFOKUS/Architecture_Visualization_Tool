@@ -16,10 +16,16 @@ To run the app please follow the following steps:
 1. Configure database settings in the [config.yaml](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/streamlit_dashboard/config.yaml) file.
 
 2. Build a docker image using the Dockerfile:
-``  docker build -t streamlit . ``
+```bash
+  docker build -t streamlit .
+```
 	
-3. Run the container:
-`` docker run -p 8501:8501 streamlit ``
+4. Run the container:
+```bash
+docker run -p 8501:8501 streamlit
+```
 
-4. Access the application at:
-`` http://localhost:8501/ ``
+6. Access the application at:
+```bash
+http://localhost:8501/
+```
