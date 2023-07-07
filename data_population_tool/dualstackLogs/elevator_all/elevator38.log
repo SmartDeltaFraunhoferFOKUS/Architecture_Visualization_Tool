@@ -1,0 +1,3 @@
+user1.Initial- user1.ArriveFloorIN+
+user1.GoFloorOUT- user1.ExitSystem+
+user1.ExitSystem- user1.final+

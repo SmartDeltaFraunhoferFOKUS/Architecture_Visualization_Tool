@@ -1,0 +1,16 @@
+user1.Initial- user1.ArriveFloorIN+
+user1.ArriveFloorIN- -CallUp-▶ user1.waiting+ user1.decision+ user1.decision.Initial+ 
+user1.elevator.decision.Initial- -AnyCalls-▶ user1.decision.elevator+ user1.decision.elevator.Initial+ 
+user1.decision.elevator.Initial+ -GoUpaFloor-▶ user1.decision.elevator.goingup+
+user1.decision.elevator.goingup- -ReachFloor-▶  user1.decision.elevator.neutral+
+user1.decision.elevator.neutral- -OpenDoors-▶ user1.decision.elevator.neutral+
+user1.decision.elevator.neutral- -AllowPassengers-▶ user1.decision.elevator.neutral+ user1.getin+ 
+user1.getin- -CallCar-▶ user1.getin+ user1.decision.elevator.goingdown+
+user1.decision.elevator.goingdown- -CloseDoors-▶ user1.decision.elevator.goingdown+
+user1.decision.elevator.goingdown- -StartMove-▶ user1.decision.elevator.goingdown+
+user1.decision.elevator.goingdown- -GoDownaFloor-▶ user1.decision.elevator.goingdown+
+user1.decision.elevator.goingdown- -ReachFloor-▶  user1.decision.elevator.neutral+
+user1.decision.elevator.neutral- -OpenDoors-▶ user1.decision.elevator.neutral+
+user1.decision.elevator.neutral- -AllowPassengers-▶ user1.GoFloorOUT+ user1.decision.elevator.neutral+
+user1.GoFloorOUT- user1.ExitSystem+
+user1.ExitSystem- user1.final+

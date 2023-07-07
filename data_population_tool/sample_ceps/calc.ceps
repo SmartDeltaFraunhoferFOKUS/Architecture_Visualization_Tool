@@ -1,0 +1,19 @@
+kind Event;
+
+kind Systemstate;
+
+Event CAPS_LOCK, ANY_KEY;
+
+
+sm{
+basic_example;
+states{Initial; Default; caps_locked;}; //if this i is small there is segmentation fault. Initial is a keyword
+
+
+t{Initial;Default;};
+t{Default;caps_locked;CAPS_LOCK;};
+t{caps_locked;Default;CAPS_LOCK;};
+
+t{Default; Default; ANY_KEY;};
+t{caps_locked;caps_locked;ANY_KEY;};
+};

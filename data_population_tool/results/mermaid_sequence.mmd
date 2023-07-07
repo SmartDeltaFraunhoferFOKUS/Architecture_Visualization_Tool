@@ -1,0 +1,11 @@
+sequenceDiagram 
+note over user1:ArriveFloorIN
+user1->>elevator:CallUp
+note over elevator:callreceived
+elevator->>decision:CallDecision
+decision->>elevator:AnyCalls
+elevator->>elevator:GoUpaFloor
+elevator->>elevator:ReachFloor
+elevator->>elevator:OpenDoors
+elevator->>user1:AllowPassengers
+note over user1:ExitSystem

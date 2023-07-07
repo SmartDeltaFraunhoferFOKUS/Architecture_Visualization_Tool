@@ -1,0 +1,8 @@
+user1.elevator.neutral- -OpenDoors-▶ user1.elevator.neutral+
+user1.elevator.neutral- -AllowPassengers-▶ user1.elevator.neutral+ user1.getin+ 
+user1.elevator.goingdown- -GoDownaFloor-▶ user1.elevator.goingdown+
+user1.elevator.goingdown- -ReachFloor-▶  user1.elevator.neutral+
+user1.elevator.neutral- -OpenDoors-▶ user1.elevator.neutral+
+user1.elevator.neutral- -AllowPassengers-▶ user1.GoFloorOUT+ user1.elevator.neutral+
+user1.GoFloorOUT- user1.ExitSystem+
+user1.ExitSystem- user1.final+

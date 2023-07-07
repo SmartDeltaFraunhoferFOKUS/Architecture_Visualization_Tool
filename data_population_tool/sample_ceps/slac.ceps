@@ -1,0 +1,17 @@
+kind Event;
+
+Event evCM_ATTEN_CHAR_IND,evTT_EV_atten_results_timeout,evTT_EV_atten_results_timeout;
+
+
+sm{
+Collect_Confirmations;
+states{Initial;WaitForCM_ATTEN_CHAR_IND;PotentialEVSEFound;NoPotentialEVSEFOUND; ReceivedCM_ATTEN_CHAR_IND;}; //if this i is small there is segmentation fault. Initial is a keyword
+
+
+t{Initial;WaitForCM_ATTEN_CHAR_IND;};
+t{PotentialEVSEFound;WaitForCM_ATTEN_CHAR_IND;};
+t{WaitForCM_ATTEN_CHAR_IND;ReceivedCM_ATTEN_CHAR_IND;evCM_ATTEN_CHAR_IND;};
+t{WaitForCM_ATTEN_CHAR_IND;PotentialEVSEFound;evTT_EV_atten_results_timeout;};
+t{WaitForCM_ATTEN_CHAR_IND;NoPotentialEVSEFOUND;evTT_EV_atten_results_timeout;};
+
+};

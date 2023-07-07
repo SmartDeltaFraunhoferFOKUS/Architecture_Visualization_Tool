@@ -1,0 +1,6 @@
+stateDiagram-v2 
+[*]-->WaitForCM_ATTEN_CHAR_IND
+PotentialEVSEFound-->WaitForCM_ATTEN_CHAR_IND
+WaitForCM_ATTEN_CHAR_IND-->NoPotentialEVSEFOUND:evTT_EV_atten_results_timeout
+WaitForCM_ATTEN_CHAR_IND-->PotentialEVSEFound:evTT_EV_atten_results_timeout
+WaitForCM_ATTEN_CHAR_IND-->ReceivedCM_ATTEN_CHAR_IND:evCM_ATTEN_CHAR_IND

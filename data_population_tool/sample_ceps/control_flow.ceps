@@ -1,0 +1,14 @@
+kind Event;
+
+Event evPROCESS_INPUT, evPARSE_LOG, evPARSE_S_EXPRESSIONS, ev_UPLOAD_TO_GRAFANA;
+
+sm{
+control_flow;
+states{Initial; s_expressions_created; mmd_list_state_machine; mmd_list_sequence_diagram; graphana_visualization;};
+
+t{Initial; s_expressions_created; evPROCESS_INPUT;};
+t{Initial; mmd_list_sequence_diagram; evPARSE_LOG;};
+t{s_expressions_created; mmd_list_state_machine; evPARSE_S_EXPRESSIONS;};
+t{mmd_list_sequence_diagram; graphana_visualization; ev_UPLOAD_TO_GRAFANA;};
+t{mmd_list_state_machine; graphana_visualization; ev_UPLOAD_TO_GRAFANA;};
+};

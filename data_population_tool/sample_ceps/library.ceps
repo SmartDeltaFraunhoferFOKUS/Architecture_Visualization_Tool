@@ -1,0 +1,16 @@
+kind Event;
+
+Event CHECK_IN, CHECK_OUT, LOST, REMIND, ARCHIVE;
+
+sm{
+basic_example2;
+
+states{Initial; checked_in; checked_out; written_off; stored;};
+
+t{Initial;checked_in;};
+t{checked_in;checked_out;CHECK_OUT;};
+t{checked_in;stored;ARCHIVE;};
+t{checked_out;checked_in;CHECK_IN;};
+t{checked_out;written_off;LOST;};
+t{checked_out;checked_out;REMIND;};
+};

@@ -1,0 +1,4 @@
+user1.Initial- user1.ArriveFloorIN+
+user1.elevator.neutral- -AllowPassengers-▶ user1.GoFloorOUT+ user1.elevator.neutral+
+user1.GoFloorOUT- user1.ExitSystem+
+user1.ExitSystem- user1.final+

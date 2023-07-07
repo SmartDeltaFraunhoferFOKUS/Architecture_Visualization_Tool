@@ -1,0 +1,1 @@
+select img from smartdelta_pcd.svg_image limit  1

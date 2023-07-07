@@ -1,0 +1,14 @@
+user1.Initial- user1.ArriveFloorIN+
+user1.ArriveFloorIN- -CallUp-▶ user1.waiting+ user1.elevator+ user1.elevator.Initial+ 
+user1.elevator.Initial- user1.elevator.callreceived+
+user1.elevator.callreceived- -CallDecision-▶ user1.elevator.decision+ user1.elevator.decision.Initial+
+user1.elevator.decision.Initial- -AnyCalls-▶ user1.elevator.goingup+
+user1.elevator.goingup- -GoUpaFloor-▶  user1.elevator.goingup+
+user1.elevator.goingup- -ReachFloor-▶  user1.elevator.neutral+
+user1.elevator.neutral- -OpenDoors-▶ user1.elevator.neutral+
+user1.elevator.neutral- -AllowPassengers-▶ user1.elevator.neutral+ user1.getin+ 
+user1.getin- -CallCar-▶ user1.getin+ user1.elevator.goingdown+
+user1.elevator.goingdown- -CloseDoors-▶ user1.elevator.goingdown+
+user1.elevator.goingdown- -StartMove-▶ user1.elevator.goingdown+
+user1.elevator.goingdown- -GoDownaFloor-▶ user1.elevator.goingdown+
+user1.ExitSystem- user1.final+

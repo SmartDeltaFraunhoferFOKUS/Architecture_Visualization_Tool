@@ -1,0 +1,17 @@
+#The configurations here define the configurations 
+database:
+    host: localhost
+    db_name: smartdelta__pcd
+    username: root
+    password: sandman
+    port: 3306
+dashboard:
+    #dashboard UID. 
+    UID: YZGTzKl4kfr #yZGTzKl4kfr
+    grafana_url: http://localhost:3000
+    username: admin
+    password: admin
+    dashboard_creation: #should app create dashboard if not already present. When this is set FALSE app will throw error if the dashboard is not already present.
+        create: true
+        title: dashboard_app_created
+        dashboard_json_location: dashboard/create_dashboard.json #dashboard json which will be used to create dashboard if no dashboard exists

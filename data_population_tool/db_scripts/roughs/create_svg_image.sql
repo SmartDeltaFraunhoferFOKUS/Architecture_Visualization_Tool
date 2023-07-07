@@ -1,0 +1,1 @@
+SELECT * FROM smartdelta__pcd.svg_image;

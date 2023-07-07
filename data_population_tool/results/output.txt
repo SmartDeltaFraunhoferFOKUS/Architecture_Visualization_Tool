@@ -1,0 +1,8 @@
+State Machine Collect_Confirmations
+ States:
+  Initial, WaitForCM_ATTEN_CHAR_IND, PotentialEVSEFound, NoPotentialEVSEFOUND, ReceivedCM_ATTEN_CHAR_IND
+ Transitions:
+  Initial                  --▶WaitForCM_ATTEN_CHAR_IND    
+  PotentialEVSEFound       --▶WaitForCM_ATTEN_CHAR_IND    
+  WaitForCM_ATTEN_CHAR_IND -evTT_EV_atten_results_timeout-▶NoPotentialEVSEFOUND              .            -evTT_EV_atten_results_timeout-▶PotentialEVSEFound              .            -evCM_ATTEN_CHAR_IND-▶ReceivedCM_ATTEN_CHAR_IND
+

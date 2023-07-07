@@ -1,0 +1,5 @@
+on.on_enter()
+calculator.Initial- calculator.on+ calculator.on.Initial+ 
+calculator.on.operand1+ calculator.on.Initial- 
+calculator.Final+ calculator.on- calculator.on.operand1- 
+
