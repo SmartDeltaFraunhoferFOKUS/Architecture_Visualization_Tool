@@ -1,0 +1,28 @@
+version: "3"
+# Created date: 07.07.2023
+# Author: Fhg
+# Last updated: 07.07.2023
+# Purpose: Create containers running mysql and the visualization app (streamlit visualization)
+# version: 0.1.0
+#----------------------------------------------------------------------------------------------------------
+# NOTE: The entire setup may take about 1 min to complete, so please be patient. Since mysql setup takes longer, App waits for database to be ready.
+#       The dependency in streamlit service just makes sure that mysql container is launched before streamlit app, it however does not wait for the db creation scripts to finish execution after container start.
+services:
+    #Create a mysql db service
+    mysql_db:
+        image: mysql
+        build: ./mysql_db/
+        container_name: mysql_db       
+        environment:
+          - MYSQL_ROOT_PASSWORD=sandman #TODO: remove this from here 
+        ports:
+          - 3306:3306
+    #Create streamlit app container      
+    streamlit:
+        image: streamlit_app
+        build: ./streamlit_dashboard/
+        container_name: streamlit_app  
+        ports:
+          - 8501:8501
+        depends_on:
+            - mysql_db

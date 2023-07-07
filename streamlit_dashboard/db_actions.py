@@ -1,7 +1,7 @@
 import mysql.connector
 from mysql.connector import Error
 import pandas as pd
-
+import time
 
 host = "localhost"
 database = "smartdelta__pcd"
@@ -13,7 +13,7 @@ class db_adm():
     database = "smartdelta__pcd"
     user = "root"
     password = "sandman"
-
+    retry = 5
     def __init__(self, _host, _user, _password, _database):
         self.host = _host
         self.user = _user
@@ -38,21 +38,28 @@ class db_adm():
 
     def connection_to_db(self, _database):
         #connect to a specific db
-        try:
-            connection = mysql.connector.connect(host= self.host,
-                                                    user= self.user,
-                                                    password= self.password,
-                                                    database= _database)
-            if connection.is_connected():
-                db_info = connection.get_server_info()
-                print("Connected to MySQL Server version ", db_info)
-                cursor = connection.cursor()
-                cursor.execute("select database();")
-                record = cursor.fetchone()
-                print("Connected to database: ", record)
-                return connection
-        except Error as e:
-            print("Error while connecting to MySQL", e)
+        while(self.retry != 0):
+            try:
+                connection = mysql.connector.connect(host= self.host,
+                                                        user= self.user,
+                                                        password= self.password,
+                                                        database= _database)
+                if connection.is_connected():
+                    db_info = connection.get_server_info()
+                    print("Connected to MySQL Server version ", db_info)
+                    cursor = connection.cursor()
+                    cursor.execute("select database();")
+                    record = cursor.fetchone()
+                    print("Connected to database: ", record)
+                    return connection
+            except Error as e:
+                self.retry = self.retry - 1 
+                time.sleep(10)
+                print("Error while connecting to MySQL...Retrying..", e)
+                self.connection_to_db(_database)
+        if(self.retry == 0):
+            print("Failed to connect to db.")
+
 
 
     def close_conn(self, _dbconn, _cursor):

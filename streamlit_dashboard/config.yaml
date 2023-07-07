@@ -1,19 +1,11 @@
 #The configurations here define the configurations 
 database:
     #change host to localhost for running without docker
-    #host: localhost 
-    host: host.docker.internal
+    host: mysql_db #localhost       # when both sql and app are running in containers use this setting. Network in docker-compose is not specified, not necessary for now so use the hostname directly.
+    #host: localhost                # when running locally use this hostname
+    #host: host.docker.internal     # when the app is running in a container and the mysql is running locally (not in container)
     db_name: smartdelta__pcd
     username: root
     password: sandman
     port: 3306
-dashboard:
-    #dashboard UID. 
-    UID: YZGTzKl4kfr #yZGTzKl4kfr
-    grafana_url: http://localhost:3000
-    username: admin
-    password: admin
-    dashboard_creation: #should app create dashboard if not already present. When this is set FALSE app will throw error if the dashboard is not already present.
-        create: true
-        title: dashboard_app_created
-        dashboard_json_location: dashboard/create_dashboard.json #dashboard json which will be used to create dashboard if no dashboard exists
+

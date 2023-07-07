@@ -15,29 +15,6 @@ class user_configs():
         self.dbname = config["database"]["db_name"]
         self.dbport = config["database"]["port"]
 
-        #read dashboard related config
-        self.grafana_url = config["dashboard"]["grafana_url"]
-        self.dashboard_uid= config["dashboard"]["UID"]
-        self.create_dashboard = config["dashboard"]["dashboard_creation"]["create"]
-        self.base_dashboard_location = config["dashboard"]["dashboard_creation"]["dashboard_json_location"]
-        self.dashboard_title = config["dashboard"]["dashboard_creation"]["title"]
-        self.username = config["dashboard"]["username"]
-        self.password = config["dashboard"]["password"]
-
-class db_configs():
-    """
-    Defines settings defined in the config file.
-    """
-    def __init__(self, config):
-        self.host = config["dashboard"]["grafana_url"]
-        self.dashboard_uid= config["dashboard"]["UID"]
-        self.create_dashboard = config["dashboard"]["dashboard_creation"]["create"]
-        self.base_dashboard_location = config["dashboard"]["dashboard_creation"]["dashboard_json_location"]
-        self.dashboard_title = config["dashboard"]["dashboard_creation"]["title"]
-        self.username = config["dashboard"]["username"]
-        self.password = config["dashboard"]["password"]
-
-
 states = ["user1.Initial", 
 "user1.ArriveFloorIN",
 "user1.waiting",
