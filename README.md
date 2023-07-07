@@ -6,4 +6,4 @@ The repo contains two applications:
 
 The general workflow is depicted below:
 
-<img src= "img/workflow.png" width="900" height="500">
+<img src= "img/workflow.png" width="1200" height="500">
