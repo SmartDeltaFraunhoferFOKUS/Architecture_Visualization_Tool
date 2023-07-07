@@ -1,6 +1,8 @@
 #The configurations here define the configurations 
 database:
-    host: localhost
+    #change host to localhost for running without docker
+    #host: localhost 
+    host: host.docker.internal
     db_name: smartdelta__pcd
     username: root
     password: sandman
