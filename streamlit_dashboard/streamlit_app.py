@@ -48,7 +48,7 @@ d = datetime.today() - timedelta(hours=0, minutes=50)
 @st.cache_data
 def get_config(config_file_loc):
     """
-    Get configuration from the config file
+    Read the database configuration from the config file
 
     args:
     -------
@@ -67,7 +67,7 @@ def get_config(config_file_loc):
 
 @st.cache_resource
 def create_cached_connection(_user_config):
-    db_obj = db_actions.db_adm(_user_config.dbhost, _user_config.dbusername, _user_config.dbpassword, _user_config.dbname)
+    db_obj = db_actions.db_adm(_user_config.dbhost, _user_config.dbusername, _user_config.dbpassword, _user_config.dbname, _user_config.dbport)
     return db_obj
 
 def get_folder_list(db_obj):

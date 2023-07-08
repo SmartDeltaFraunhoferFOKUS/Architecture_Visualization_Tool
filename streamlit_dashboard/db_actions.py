@@ -13,11 +13,13 @@ class db_adm():
     database = "smartdelta__pcd"
     user = "root"
     password = "sandman"
+    port = 3306
     retry = 5
-    def __init__(self, _host, _user, _password, _database):
+    def __init__(self, _host, _user, _password, _database, _port):
         self.host = _host
         self.user = _user
         self.password = _password
+        self.port = _port
         #self.connection = self.get_connection()
         self.connection = self.connection_to_db(_database)
 
@@ -27,7 +29,7 @@ class db_adm():
             connection = mysql.connector.connect(host= self.host,
                                                     user= self.user,
                                                     password= self.password,
-                                                    port= 3306)
+                                                    port= self.port)
             if connection.is_connected():
                 db_info = connection.get_server_info()
                 print("Connected to MySQL Server version ", db_info)
@@ -43,7 +45,8 @@ class db_adm():
                 connection = mysql.connector.connect(host= self.host,
                                                         user= self.user,
                                                         password= self.password,
-                                                        database= _database)
+                                                        database= _database,
+                                                        port= self.port)
                 if connection.is_connected():
                     db_info = connection.get_server_info()
                     print("Connected to MySQL Server version ", db_info)
