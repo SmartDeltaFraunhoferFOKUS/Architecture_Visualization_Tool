@@ -11,6 +11,8 @@ Please follow the following steps to setup and get the app running:
 1. *For first time run*, setup the required database and tables by running the [CREATE_schema_tables.sql](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/data_population_tool/db_scripts/CREATE_schema_tables.sql) script in the *./data_population_tool/db_scripts*
 
 2. Run the app as:
- `` python main.py -i "<folder_location>" ``
+```bash
+ python main.py -i "<folder_location>"
+```
 
 For subsequent runs, skip step 1 since database is already created.
