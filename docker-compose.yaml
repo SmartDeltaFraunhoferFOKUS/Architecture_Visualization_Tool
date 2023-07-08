@@ -1,7 +1,7 @@
 version: "3"
 # Created date: 07.07.2023
 # Author: Fhg
-# Last updated: 07.07.2023
+# Last updated: 08.07.2023
 # Purpose: Create containers running mysql server (with demo data) and the visualization app (streamlit visualization)
 # version: 0.1.0
 #----------------------------------------------------------------------------------------------------------
