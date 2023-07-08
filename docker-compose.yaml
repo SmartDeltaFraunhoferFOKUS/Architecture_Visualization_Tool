@@ -2,22 +2,23 @@ version: "3"
 # Created date: 07.07.2023
 # Author: Fhg
 # Last updated: 07.07.2023
-# Purpose: Create containers running mysql and the visualization app (streamlit visualization)
+# Purpose: Create containers running mysql server (with demo data) and the visualization app (streamlit visualization)
 # version: 0.1.0
 #----------------------------------------------------------------------------------------------------------
 # NOTE: The entire setup may take about 1 min to complete, so please be patient. Since mysql setup takes longer, App waits for database to be ready.
 #       The dependency in streamlit service just makes sure that mysql container is launched before streamlit app, it however does not wait for the db creation scripts to finish execution after container start.
 services:
-    #Create a mysql db service
-    mysql_db:
-        image: mysql
+    #docker.compose creates a service itself which can link multiple containers; so defining own service is ok but not really necessary for now
+    #Create container running a mysql db server
+    mysql_db: #access mysql with this name within the app
+        image: mysql  
         build: ./mysql_db/
         container_name: mysql_db       
         environment:
-          - MYSQL_ROOT_PASSWORD=sandman #TODO: remove this from here 
+          - MYSQL_ROOT_PASSWORD=sandman #TODO: remove this from here :)
         ports:
-          - 3306:3306
-    #Create streamlit app container      
+          - 3306:3306 
+    #Create container running streamlit app container      
     streamlit:
         image: streamlit_app
         build: ./streamlit_dashboard/

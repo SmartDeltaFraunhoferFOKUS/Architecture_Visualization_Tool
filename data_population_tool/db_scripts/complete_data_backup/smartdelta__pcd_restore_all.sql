@@ -1,8 +1,19 @@
+/*
+Created date: 06.06.2023
+Author: fhg
+Last Updated: 06.06.2023
+Purpose: This will completely restore the data within the SmartDelta__PCD database. This includes, tables and data within the tables
+----------------------------------------------------------------CAUTION---------------------------------------------------------------
+THIS SCRIPT WILL DROP ALL EXISTING TABLES AND WILL INITIATE NEW TABLE CREATION PROCESS AND BACKED-UP DATA DUMP
+ONL USE THIS SCRIPT ONLY TO RESTORE DATA
+*/
+
 -- MySQL dump 10.13  Distrib 8.0.18, for Win64 (x86_64)
 --
 -- Host: localhost    Database: smartdelta__pcd
 -- ------------------------------------------------------
 -- Server version	8.0.18
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -14,10 +25,6 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
---
--- Table structure for table `tbl_ex_fileinfo`
---
 
 -- CREATE schema smartdelta__pcd;
 
@@ -37,6 +44,21 @@ CREATE TABLE `tbl_ex_folderinfo` (
 --
 -- Dumping data for table `tbl_ex_folderinfo`
 --
+
+LOCK TABLES `tbl_ex_folderinfo` WRITE;
+/*!40000 ALTER TABLE `tbl_ex_folderinfo` DISABLE KEYS */;
+INSERT INTO `tbl_ex_folderinfo` VALUES (1,'elevator','C:\\Users\\sab\\Downloads\\Vulnerablity\\SmartDelta\\Akka\\samples\\poc_new\\architecture_visualization_tool_db_changes\\architecture_visualization_tool\\dualstackLogs\\elevator'),(2,'calculator','C:\\Users\\sab\\Downloads\\Vulnerablity\\SmartDelta\\Akka\\samples\\poc_new\\architecture_visualization_tool_db_changes\\architecture_visualization_tool\\dualstackLogs\\calculator'),(3,'elevator_all','C:\\Users\\sab\\Downloads\\Vulnerablity\\SmartDelta\\Akka\\samples\\poc_new\\architecture_visualization_tool_db_changes\\architecture_visualization_tool\\dualstackLogs\\elevator_all');
+/*!40000 ALTER TABLE `tbl_ex_folderinfo` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2023-07-07  2:45:42
 
@@ -252,21 +274,11 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
-LOCK TABLES `tbl_ex_folderinfo` WRITE;
-/*!40000 ALTER TABLE `tbl_ex_folderinfo` DISABLE KEYS */;
-INSERT INTO `tbl_ex_folderinfo` VALUES (1,'elevator','C:\\Users\\sab\\Downloads\\Vulnerablity\\SmartDelta\\Akka\\samples\\poc_new\\architecture_visualization_tool_db_changes\\architecture_visualization_tool\\dualstackLogs\\elevator'),(2,'calculator','C:\\Users\\sab\\Downloads\\Vulnerablity\\SmartDelta\\Akka\\samples\\poc_new\\architecture_visualization_tool_db_changes\\architecture_visualization_tool\\dualstackLogs\\calculator'),(3,'elevator_all','C:\\Users\\sab\\Downloads\\Vulnerablity\\SmartDelta\\Akka\\samples\\poc_new\\architecture_visualization_tool_db_changes\\architecture_visualization_tool\\dualstackLogs\\elevator_all');
-/*!40000 ALTER TABLE `tbl_ex_folderinfo` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
+--
+-- Table structure for table `tbl_ex_fileinfo`
+--
 
 DROP TABLE IF EXISTS `tbl_ex_fileinfo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
