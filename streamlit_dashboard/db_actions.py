@@ -6,7 +6,7 @@ from mysql.connector import Error
 import pandas as pd
 import time
 
-"""
+""" 
 This entire package performs all MySQL database related operations. This involves:
 1. Initiating connection with the DB and storing connection objects
 2. Performing queries and returning results
