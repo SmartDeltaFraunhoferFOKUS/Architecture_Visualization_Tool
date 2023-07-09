@@ -1,4 +1,4 @@
 on.on_enter()
-calculator.Initial- calculator.on+ calculator.on.Initial+ 
-calculator.on.operand2+  calculator.on- calculator.on.operand2- 
+calculator.Initial- -C-▶ calculator.on+ calculator.on.Initial+ 
+calculator.on- calculator.on.operand2- -DigitOrDot-▶  calculator.on.operand2+ 
 

@@ -1,6 +1,6 @@
 on.on_enter()
-calculator.Initial- calculator.on+ calculator.on.Initial+ 
-calculator.on.operand1+ calculator.on.Initial- 
-calculator.on.operand1- calculator.on.opEntered+ 
-calculator.on.opEntered- calculator.on.operand2+ 
+calculator.Initial- -C-▶ calculator.on+ calculator.on.Initial+ 
+calculator.on.Initial-  -DigitOrDot-▶ calculator.on.operand1+ 
+calculator.on.operand1- -Operand-▶ calculator.on.opEntered+ 
+calculator.on.opEntered- -DigitOrDot-▶ calculator.on.operand2+ 
 
