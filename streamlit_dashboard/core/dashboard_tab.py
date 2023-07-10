@@ -10,6 +10,7 @@ from bokeh.models import DataTable, TableColumn, HTMLTemplateFormatter,DateForma
 from streamlit_bokeh_events import streamlit_bokeh_events
 from bokeh.models.widgets import DataTable, DateFormatter, TableColumn
 
+from st_aggrid import AgGrid, GridOptionsBuilder
 #import python libraries
 import numpy as np
 import pandas as pd
@@ -57,9 +58,51 @@ def get_file_list(foldername: str, db_obj:db_actions.db_adm) -> pd.DataFrame:
     records = db_actions.execute_table(db_obj.connection, filelist_dbquery)
     return records
     
+def draw_fileinfo_aggrid(pd_dataframe:pd.DataFrame):
+    """
+    USING AGGRID.:::::> Draws a table that contains details about a file in the dashboard.
+    
+    Uses bokeh to draw tables. And uses streamlits bokeh events to handle click events to the grid
+
+    Args:
+    --------
+    * pd_dataframe: A pandas dataframe containing details about a file
+
+    Returns:
+    -----------
+    * selected_file.iloc[0]: Selected filename when the filelist grid is clicked
+    * None: when nothing is selected in the grid 
+    """
+
+    # Define sample data
+    df = pd.DataFrame(pd_dataframe)
+
+    # Configure grid options using GridOptionsBuilder
+    builder = GridOptionsBuilder.from_dataframe(df)
+    #builder.configure_default_column(cellStyle={'color': 'black', 'font-size': '12px'}, suppressMenu=True, wrapHeaderText=True, autoHeaderHeight=True)
+    builder.configure_default_column(suppressMenu=True, wrapHeaderText=True, autoHeaderHeight=True)
+    #builder.configure_pagination(enabled=False)
+    #builder.configure_auto_height(autoHeight= True)
+    builder.configure_selection(selection_mode='single', use_checkbox=True)
+    #builder.configure_pagination(enabled=True, paginationPageSize=5)
+    #builder.configure_column('System Name', editable=False)
+    builder.configure_column("CreatedDate", type=["customDateTimeFormat"], custom_format_string='yyyy-MM-dd', header_name="Created Date")
+    builder.configure_column("ModifiedDate", type=["customDateTimeFormat"], custom_format_string='yyyy-MM-dd', header_name="Modified Date")
+    builder.configure_column("SimilarityCount", type=["customDateTimeFormat"], custom_format_string='yyyy-MM-dd', header_name="Similarity Count")
+    builder.configure_column("filesize", type=["customDateTimeFormat"], custom_format_string='yyyy-MM-dd', header_name="File Size (KB)")
+    builder.configure_column("FileName", type=["customDateTimeFormat"], custom_format_string='yyyy-MM-dd', header_name="File Name")
+    grid_options = builder.build()
+
+    return_value = AgGrid(df, gridOptions=grid_options, height=300, width=500)
+    if return_value['selected_rows']:
+        filename = return_value['selected_rows'][0]['FileName']
+        return filename
+    else:
+         return None
+
 def draw_fileinfo_grid(pd_dataframe:pd.DataFrame):
     """
-    Draws a table that contains details about a file in the dashboard.
+    USING BOKEH.:::::::> Draws a table that contains details about a file in the dashboard.
     
     Uses bokeh to draw tables. And uses streamlits bokeh events to handle click events to the grid
 
@@ -156,10 +199,10 @@ def draw_main_dashboard(db_obj:db_actions.db_adm):
     #populate contents for file level tabs          
     with file_lvl:
         #get filelist from the selected folder  
-        st.markdown('Showing processed log files within the selected folder, select any file to view related views')
+        st.markdown('Showing processed log files within the selected folder, select any file to draw related views')
         filelist = get_file_list(selected_folder, db_obj)
         #selected_file = st.selectbox("select a file.", options=filelist)
-        selected_file = draw_fileinfo_grid(filelist)
+        selected_file = draw_fileinfo_aggrid(filelist)
         #draw diagrams based on selected files
         if (selected_file is not None):
             show_diagrams(selected_file, db_obj)
