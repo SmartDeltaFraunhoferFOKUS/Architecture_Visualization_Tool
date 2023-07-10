@@ -1,7 +1,7 @@
 # Architecture visualization Dashboard.
 
 The repo contains two applications:
-1. A [Data population tool](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/tree/master/data_population_tool): computes different views from the given input and stores them in the database. 
+1. A [Data population tool](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/tree/master/data_population_tool): computes different architectural views from the given input and stores them in the database. 
 2. A [Streamlit dashboard](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/tree/master/streamlit_dashboard): uses the computed data in the database to create a visualization Dashboard.
 
 The general workflow is depicted below:
