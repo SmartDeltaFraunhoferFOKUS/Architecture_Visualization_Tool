@@ -1,16 +1,18 @@
 import streamlit as st
 from datetime import datetime, timedelta
 from datetime import date
-
+import settings 
 #this is just a placeholder for now to show currently signed-in use in the  "settings" tab
 user ="User1"
 
 #This is currently a placeholder to show the time the current user logged in. Currently always 1 hr from current time. But later there are big plans XD
 logged_in_since = datetime.today() - timedelta(hours=0, minutes=50)
 
-def draw_settings_tab():
+def draw_settings_tab(user_config:settings.user_configs):
     """
-    Draw the settings tab
+    Draw the settings tab based on user configuration
+    user_config: current user configuraion
+
     """
     #currently all settings are dummy and so are disabled. But the plan is to include them in the comming iterations
     #Define columns in the settings tab

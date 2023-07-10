@@ -71,11 +71,12 @@ def create_cached_connection(_user_config: settings.user_configs) -> db_actions.
     db_obj = db_actions.db_adm(_user_config.dbhost, _user_config.dbusername, _user_config.dbpassword, _user_config.dbname, _user_config.dbport)
     return db_obj
 
-def get_dashboard_main(db_obj:db_actions.db_adm):
+def get_dashboard_main(db_obj:db_actions.db_adm, user_config:settings.user_configs):
     """
     Draw components on the dashboard. This will draw all three main tabs (dash, settings, about).
 
-    * db_obj: An object that contains database connection.        
+    * db_obj: An object that contains database connection.
+    * user_config: user configurations       
     """
     #Tried placing the logo but the render was so bad. May be with a good resolution image, it gets better   
     #st.image(r"./logo/SmartDelta_logo.png", width=100)
@@ -92,7 +93,7 @@ def get_dashboard_main(db_obj:db_actions.db_adm):
             dashboard_tab.draw_main_dashboard(db_obj)
     #Settings Tab
     with settings:
-        the_settings_tab.draw_settings_tab()
+        the_settings_tab.draw_settings_tab(user_config)
     #About Tab
     #simple tab containing information about the application
     with about:
@@ -104,7 +105,7 @@ def main():
     #create a database info object WITH a live db connection that can then be used for executing queries
     db_obj = create_cached_connection(user_config)  
     #start drawing dashboard
-    get_dashboard_main(db_obj)    
+    get_dashboard_main(db_obj, user_config)    
 
 if __name__ == '__main__':
     main()
