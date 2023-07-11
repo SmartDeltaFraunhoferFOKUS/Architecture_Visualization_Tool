@@ -2,7 +2,7 @@
 
 The visualization tool constitutes of two modules:
 
-1. A [Data analysis tool](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/tree/master/data_analysis_tool): computes different architectural views from the given input and stores them in a database. 
+1. A [Data analysis tool](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/tree/master/Data_analysis_tool): computes different architectural views from the given input and stores them in a database. 
 2. A [Visualization dashboard](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/tree/master/streamlit_dashboard): uses the computed data in the database to create a visualization Dashboard.
 
 The general workflow is depicted below:
