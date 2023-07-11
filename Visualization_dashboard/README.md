@@ -1,17 +1,21 @@
 # Architecture Visualization Dashboard
 
-The Dashboard uses the data populated by the [Data analysis tool](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/tree/master/data_analysis_tool) to generate necessary visualizations in a [Streamlit](https://streamlit.io/) powered dashboard.
+The Dashboard uses the data populated by the [Data analysis tool](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/tree/master/Data_analysis_tool) to generate necessary visualizations in a [Streamlit](https://streamlit.io/) powered dashboard.
+
+The workflow is as below:
+
+<img src= "https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/_img/visualization_dashboard.png" width="900" height="350">
 
 ### Pre-requisites before running the app:
-1. Populate necessary data using the [Data analysis tool](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/tree/master/data_analysis_tool). The relevant information can be found in the corresponding [readme](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/data_analysis_tool/README.md)
+1. Populate necessary data using the [Data analysis tool](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/tree/master/Data_analysis_tool). The relevant information can be found in the corresponding [readme](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/Data_analysis_tool/README.md)
 
-    However, if you want to run the Visualization with pre-populated data and without having to run the Data population tool, please run the [smartdelta__pcd_restore_all.sql](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/data_analysis_tool/db_scripts/complete_data_backup/smartdelta__pcd_restore_all.sql) script. This will completely create a pre-populated database called **SmartDelta__PCD** in the mysql db.
+    However, if you want to run the Visualization with pre-populated data and without having to run the Data population tool, please run the [smartdelta__pcd_restore_all.sql](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/Data_analysis_tool/db_scripts/complete_data_backup/smartdelta__pcd_restore_all.sql) script. This will completely create a pre-populated database called **SmartDelta__PCD** in the mysql db.
 
-2. Configure database settings in the [config.yaml](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/visualization_dashboard/config.yaml) file.
+2. Configure database settings in the [config.yaml](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/Visualization_dashboard/config.yaml) file.
 
 
 ### For deployments *without* docker:
-1. Please verify all dependencies are installed using the [requirement.txt](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/visualization_dashboard/requirements.txt)
+1. Please verify all dependencies are installed using the [requirement.txt](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/Visualization_dashboard/requirements.txt)
 
 2. Run the application as:
 	```bash

@@ -3,7 +3,7 @@
 The visualization tool constitutes of two modules:
 
 1. A [Data analysis tool](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/tree/master/Data_analysis_tool): computes different architectural views from the given input and stores them in a database. 
-2. A [Visualization dashboard](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/tree/master/streamlit_dashboard): uses the computed data in the database to create a visualization Dashboard.
+2. A [Visualization dashboard](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/tree/master/Visualization_dashboard): uses the computed data in the database to create a visualization Dashboard.
 
 The general workflow is depicted below:
 
@@ -17,8 +17,10 @@ To have a quick overview of the Dashboard, we have already created a database wi
 This data can already be used to view sample visualizations via the Dashboard. 
 
 The [docker-compose](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/docker-compose.yaml) file in this directory launches two containers, 
-a. a mysqldb container containing the database with computed data, ready for visualization, 
-b. a [streamlit](https://streamlit.io/) based visualization dashboard that attaches to this database.  
+
+	a. a mysqldb container containing the database with computed data, ready for visualization, 
+	
+	b. a [streamlit](https://streamlit.io/) based visualization dashboard that attaches to this database.  
 
 For a demo of the Dashboard, just run:
 
