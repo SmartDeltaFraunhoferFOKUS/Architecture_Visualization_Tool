@@ -4,7 +4,7 @@ The Dashboard uses the data populated by the [Data analysis tool](https://github
 
 The workflow is as below:
 
-<img src= "https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/_img/visualization_dashboard.png" width="450" height="250">
+<img src= "https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/_img/visualization_dashboard.png" width="550" height="200">
 
 ### Pre-requisites before running the app:
 1. Populate necessary data using the [Data analysis tool](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/tree/master/Data_analysis_tool). The relevant information can be found in the corresponding [readme](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/Data_analysis_tool/README.md)
