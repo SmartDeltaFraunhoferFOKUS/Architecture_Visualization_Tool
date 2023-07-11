@@ -21,7 +21,7 @@ services:
     #Create container running streamlit app container      
     streamlit:
         image: streamlit_app
-        build: ./streamlit_dashboard/
+        build: ./Visualization_dashboard/
         container_name: streamlit_app  
         ports:
           - 8501:8501

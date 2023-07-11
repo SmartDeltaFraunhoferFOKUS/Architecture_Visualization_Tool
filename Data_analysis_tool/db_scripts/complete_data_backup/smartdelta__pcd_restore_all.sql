@@ -30,7 +30,7 @@ ONL USE THIS SCRIPT ONLY TO RESTORE DATA
 -- Table structure for table `tbl_ex_folderinfo`
 --
 
--- CREATE schema smartdelta__pcd;
+CREATE schema smartdelta__pcd;
 
 USE smartdelta__pcd;
 
