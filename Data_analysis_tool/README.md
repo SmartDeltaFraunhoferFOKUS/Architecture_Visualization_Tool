@@ -16,7 +16,7 @@ Please follow the following steps to setup and get the app running:
 2. Configure the application to use the database through the [config.yaml](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/Data_analysis_tool/config/dash_config.yaml) file.
 	In this file, please provide the details like database host, port, database name, username, and password
 	
-3. Use the [requirements.txt] (https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/Data_analysis_tool/requirements.txt) file to install all dependencies.
+3. Use the [requirements.txt](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/Data_analysis_tool/requirements.txt) file to install all dependencies.
 
 3. Run the app as:
     ```bash
