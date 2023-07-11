@@ -18,8 +18,7 @@ This data can already be used to view sample visualizations via the Dashboard.
 
 The [docker-compose](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/docker-compose.yaml) file in this directory launches two containers, 
 
-1. a mysqldb container containing the database with computed data, ready for visualization, 
-	
+1. a mysqldb container containing the database with computed data, ready for visualization, 	
 2. a [streamlit](https://streamlit.io/) based visualization dashboard that attaches to this database.  
 
 For a demo of the Dashboard, just run:
