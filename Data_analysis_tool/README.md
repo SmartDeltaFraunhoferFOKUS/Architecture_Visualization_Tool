@@ -6,7 +6,7 @@ The application takes a folder consisting of log files as input and for each fil
 
 The workflow is as shown in the figure below:
 
-<img src= "https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/_img/diagram_analysis.png" width="900" height="350">
+<img src= "https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/_img/diagram_analysis.png" width="750" height="400">
 
 Please follow the following steps to setup and get the app running:
 
