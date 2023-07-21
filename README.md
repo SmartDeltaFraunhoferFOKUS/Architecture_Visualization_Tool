@@ -1,4 +1,4 @@
-# Architecture visualization tool.
+# Architecture analysis and visualization tool.
 
 The visualization tool constitutes of two modules:
 
