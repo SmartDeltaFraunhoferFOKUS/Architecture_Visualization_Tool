@@ -13,7 +13,8 @@ services:
     mysql_db: #access mysql with this name within the app
         image: mysql  
         build: ./mysql_db/
-        container_name: mysql_db       
+        container_name: mysql_db  
+        platform: linux/x86_64    
         environment:
           - MYSQL_ROOT_PASSWORD=sandman #TODO: remove this from here :)
         ports:
@@ -23,6 +24,7 @@ services:
         image: streamlit_app
         build: ./Visualization_dashboard/
         container_name: streamlit_app  
+        platform: linux/x86_64  #not really necessary for windows and linux but the build fails for OSX
         ports:
           - 8501:8501
         depends_on:
