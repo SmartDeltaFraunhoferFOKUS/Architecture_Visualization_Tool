@@ -15,7 +15,7 @@ The general workflow is depicted below:
 
 Please follow the [wiki](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/wiki) for more details.
 
-**Note:** This is the initial version of the tool and the workflow and components may likely change overtime as the development progresses
+**Note:** This is the initial version of the tool. The workflow and components may likely change over time as the development progresses
 
 ## Running the Dashboard with pre-computed data
 
