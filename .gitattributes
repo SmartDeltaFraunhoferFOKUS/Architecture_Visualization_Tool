@@ -1,1 +1,2 @@
-*.ipynb linguist-vendored
+# Remove IPython notebooks from language statistics
+*.ipynb linguist-detectable=false
