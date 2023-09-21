@@ -211,6 +211,7 @@ def draw_main_dashboard(db_obj:db_actions.db_adm):
     with folder_lvl:
         '''**Heatmaps similarity matrix**'''
         #draw similarity heatmap
+        st.markdown("**Heatmaps similarity matrix**")
         draw_similarity_heatmap(selected_folder, db_obj)
     #st.divider()
     selected_file = None
