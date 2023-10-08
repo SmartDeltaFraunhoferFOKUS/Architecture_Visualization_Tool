@@ -1,0 +1,19 @@
+kind Event;
+
+
+Event E9;
+
+
+sm{
+    S0;
+
+    states{
+        Initial;
+        state1;
+        Final;
+    };
+
+
+    t{Initial; state1;E9;};
+    t{state1; Final;};
+};

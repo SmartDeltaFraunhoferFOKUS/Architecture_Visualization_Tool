@@ -1,8 +1,8 @@
 #The configurations here define the configurations 
 database:
     #change host to localhost for running without docker
-    host: mysql_db #localhost       # when both sql and app are running in containers use this setting. Network in docker-compose is not specified, not necessary for now so use the hostname directly.
-    #host: localhost                # when running locally use this hostname
+    #host: mysql_db #localhost       # when both sql and app are running in containers use this setting. Network in docker-compose is not specified, not necessary for now so use the hostname directly.
+    host: localhost                # when running locally use this hostname
     #host: host.docker.internal     # when the app is running in a container and the mysql is running locally (not in container)
     db_name: smartdelta__pcd
     username: root

@@ -3,12 +3,12 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 #import bokeh and related extension for streamlit
-from bokeh.plotting import figure, show
-from bokeh.plotting import figure
-from bokeh.models import ColumnDataSource, CustomJS
-from bokeh.models import DataTable, TableColumn, HTMLTemplateFormatter,DateFormatter
-from streamlit_bokeh_events import streamlit_bokeh_events
-from bokeh.models.widgets import DataTable, DateFormatter, TableColumn
+#from bokeh.plotting import figure, show
+#from bokeh.plotting import figure
+#from bokeh.models import ColumnDataSource, CustomJS
+#from bokeh.models import DataTable, TableColumn, HTMLTemplateFormatter,DateFormatter
+#from streamlit_bokeh_events import streamlit_bokeh_events
+#from bokeh.models.widgets import DataTable, DateFormatter, TableColumn
 
 from st_aggrid import AgGrid, GridOptionsBuilder
 #import python libraries
@@ -22,7 +22,8 @@ import json
 import db_actions
 from .heatmaps import *
 from .seqdiagrams import draw_sequence_diagram
-
+#from .event_map import *
+from .event_map_file_lvl import *
 
 def get_folder_list(db_obj:db_actions.db_adm) -> pd.DataFrame:
     """
@@ -195,7 +196,7 @@ def draw_main_dashboard(db_obj:db_actions.db_adm):
     #Create filelevel and folderlevel tabs.
     # file level tab contains all diagrams that are filelevel
     # folder level tab contains all diagrams that are folderlevel
-    file_lvl, folder_lvl = st.tabs(["File-level views", "Folder-level views"]) 
+    file_lvl, folder_lvl, event_map = st.tabs(["File-level views", "Folder-level views", "Event Flow Diagram"]) 
     #populate contents for file level tabs          
     with file_lvl:
         #get filelist from the selected folder  
@@ -215,4 +216,8 @@ def draw_main_dashboard(db_obj:db_actions.db_adm):
         draw_similarity_heatmap(selected_folder, db_obj)
     #st.divider()
     selected_file = None
-
+    
+    with event_map:
+        "Events flow diagram"
+        #draw_event_flow_diagram()
+        draw_sm_events_map()

@@ -1,0 +1,32 @@
+kind Event;
+
+
+Event REQ, RES;
+
+
+sm{
+    client;
+
+    states{
+        Initial;
+        RequestConnect;
+        ConnectionAccepted;
+        Final;
+    };
+
+    Actions{
+        try_connect {
+            print("=>Connecting to server.\n");
+            {REQ;}
+        };
+
+        connected{
+            print("=>Connection established!\n");
+        };
+    };
+
+
+    t{Initial; RequestConnect;;try_connect;};
+    t{RequestConnect; ConnectionAccepted; RES; connected;};
+    t{ConnectionAccepted; Final;};
+};

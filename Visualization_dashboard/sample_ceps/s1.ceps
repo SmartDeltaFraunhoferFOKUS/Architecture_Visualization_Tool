@@ -1,0 +1,46 @@
+kind Event;
+
+
+Event E1, E2, E3;
+
+
+sm{
+    S1;
+
+    states{
+        Initial;
+        state1;
+        state2;
+        Final;
+    };
+
+    Actions{
+        try_connect {
+            print("=>Connecting to server.\n");
+            {E1;}
+			{E2;}
+        };
+
+        connected{
+            print("=>Connection established!\n");
+        };
+    };
+
+
+    t{Initial; state1;;try_connect;};
+    t{state1; state2; E3; connected;};
+    t{state2; Final;};
+};
+
+sm{
+    S6;
+
+    states{
+        Initial;
+        state1;
+        Final;
+    };
+
+    t{Initial; state1;E1;};
+    t{state1; Final;};
+};

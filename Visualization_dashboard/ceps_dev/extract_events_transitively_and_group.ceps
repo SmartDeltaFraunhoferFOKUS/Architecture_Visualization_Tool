@@ -1,0 +1,81 @@
+
+macro extract_in_events_inner{
+ for (a_machine:arglist.sm){
+        for (a_transition:a_machine.t){
+            for(an_event : a_transition.content().symbol("Event")){
+                an_event;
+            }
+        }
+        extract_in_events_inner{a_machine.sm;};
+ }
+};
+
+macro extract_events {
+ for (a_machine:arglist.sm){
+    comp{
+        name{a_machine.content().at(0);};
+        in_ev_pre{
+         for (a_transition:a_machine.t){
+            for(an_event : a_transition.content().symbol("Event")){
+                an_event;
+            }
+         }
+         extract_in_events_inner{a_machine.sm;};
+        };
+        in_ev{
+         predecessor().content().symbol("Event").sort().unique();
+        };
+        out_ev_pre{
+         for (an_action:a_machine.Actions.content().is_struct()){
+            an_action.fetch_recursively_symbols().symbol("Event");
+         }
+        };
+        out_ev{
+         predecessor().content().symbol("Event").sort().unique();
+        };
+    };
+ }
+};
+extract_events{root.sm;};
+
+val endl="\n";
+val blank = " ";
+val blank4 = "    ";
+val comma = ",";
+val quotes = "\"";
+val out_ev_field = " \"out_events\":"; 
+val in_ev_field = " \"in_events\":"; 
+val name_field = " \"name\":"; 
+val lbrace = "{"; 
+val rbrace = "}"; 
+
+json{
+"{";endl;
+"  \"components\":";endl; 
+" [";
+for(c:root.comp){
+    endl;
+    blank4;lbrace;
+    name_field; quotes; c.name.content(); quotes; comma;
+
+     in_ev_field; "[";
+     for(e:c.in_ev.content().symbol()) {
+        quotes; e; quotes; if(!last){comma;}
+     }
+     "]";comma;
+    
+     out_ev_field; "[";
+     for(e:c.out_ev.content().symbol()) {
+        quotes; e; quotes; if(!last){comma;}
+     }
+     "]";
+    rbrace;
+    if(!last){comma;};
+}
+endl;
+" ]";
+endl;
+rbrace;endl;
+};
+
+print(root.json.content());

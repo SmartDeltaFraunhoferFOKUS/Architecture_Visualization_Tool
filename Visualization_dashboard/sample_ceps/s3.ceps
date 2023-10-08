@@ -1,0 +1,30 @@
+kind Event;
+
+
+Event E1, E2, E4, E5;
+
+
+sm{
+    S3;
+
+    states{
+        Initial;
+        s3_state1;
+        s3_state2;
+		s3_state3;
+        Final;
+    };
+
+    Actions{
+        accept_connect {
+            print("=>Accepted connection.\n");
+            {E5;}
+        };
+    };
+
+
+    t{Initial; s3_state1;};
+    t{s3_state1; s3_state2; E2; accept_connect;};
+    t{s3_state2; s3_state3; E4;};
+	t{s3_state3; Final;};
+};

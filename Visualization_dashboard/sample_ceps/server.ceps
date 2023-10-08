@@ -1,0 +1,28 @@
+kind Event;
+
+
+Event REQ, RES;
+
+
+sm{
+    server;
+
+    states{
+        Initial;
+        WaitConnect;
+        ConnectionAccepted;
+        Final;
+    };
+
+    Actions{
+        accept_connect {
+            print("=>Accepted connection.\n");
+            {RES;}
+        };
+    };
+
+
+    t{Initial; WaitConnect;};
+    t{WaitConnect; ConnectionAccepted; REQ; accept_connect;};
+    t{ConnectionAccepted; Final;};
+};
