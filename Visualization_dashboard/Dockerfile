@@ -4,8 +4,9 @@ WORKDIR /streamlit_dashboard
 
 COPY . .
 
-COPY ./ceps_dev/ceps /usr/sbin/local
-chmod /usr/local/sbin/ceps +x 
+COPY ./ceps_dev/ceps /usr/local/sbin
+
+RUN chmod +x /usr/local/sbin/ceps  
 
 RUN pip3 install -r requirements.txt
 
