@@ -4,6 +4,7 @@ version: "3"
 # Last updated: 08.07.2023
 # Purpose: Create containers running mysql server (with demo data) and the visualization app (streamlit visualization)
 # version: 0.1.0
+# update: 13 oct 2023
 #----------------------------------------------------------------------------------------------------------
 # NOTE: The entire setup may take about 1 min to complete, so please be patient. Since mysql setup takes longer, App waits for database to be ready.
 #       The dependency in streamlit service just makes sure that mysql container is launched before streamlit app, it however does not wait for the db creation scripts to finish execution after container start.
