@@ -4,6 +4,9 @@ WORKDIR /streamlit_dashboard
 
 COPY . .
 
+COPY ./ceps_dev/ceps /usr/sbin/local
+chmod /usr/local/sbin/ceps +x 
+
 RUN pip3 install -r requirements.txt
 
 EXPOSE 8501
