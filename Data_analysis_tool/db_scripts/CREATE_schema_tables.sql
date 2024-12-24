@@ -114,3 +114,32 @@ CREATE TABLE `tbl_viz_heatmaps` (
   CONSTRAINT `tbl_viz_heatmaps_ibfk_1` FOREIGN KEY (`fileid`) REFERENCES `tbl_ex_fileinfo` (`fileid`) ON DELETE CASCADE ON UPDATE RESTRICT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+/*
+Create tbl_ex_similarity_info
+	Updated Date: 06.11.2024
+	Purpose: Contains all related information required to show delta view on dashboard.
+*/
+CREATE TABLE `tbl_ex_similarity_info` (
+
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+
+  `filename` varchar(45) DEFAULT NULL,
+
+  `svg_data_usm` longtext,
+
+  `svg_data_dbsm` longtext,
+
+  `CreatedDate` datetime DEFAULT NULL,
+
+  PRIMARY KEY (`ID`)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `tbl_viz_state_diagram` (
+  `fileid` int DEFAULT NULL,
+  `puml` longtext,
+  `svg_data` blob,
+  KEY `fileid` (`fileid`),
+  CONSTRAINT `tbl_viz_state_diagram_ibfk_1` FOREIGN KEY (`fileid`) REFERENCES `tbl_ex_fileinfo` (`fileid`) ON DELETE CASCADE ON UPDATE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+ 

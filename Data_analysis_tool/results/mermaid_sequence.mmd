@@ -8,4 +8,10 @@ elevator->>elevator:GoUpaFloor
 elevator->>elevator:ReachFloor
 elevator->>elevator:OpenDoors
 elevator->>user1:AllowPassengers
-note over user1:ExitSystem
+user1->>elevator:CallCar
+elevator->>elevator:CloseDoors
+elevator->>elevator:StartMove
+elevator->>elevator:GoDownaFloor
+elevator->>elevator:ReachFloor
+elevator->>elevator:OpenDoors
+elevator->>elevator:AllowPassengers

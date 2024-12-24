@@ -3,10 +3,10 @@ from email import message
 from math import fabs
 import re
 #from tkinter.tix import ACROSSTOP
-from unittest import TestResult
-import display_graph as dp
+#from unittest import TestResult
+#import display_graph as dp
 import os
-import dashboard.dashboard as dashboard
+#import dashboard.dashboard as dashboard
 import intrepret_trace  as it
 import settings
 #import build_diagram_abs as build_diagram

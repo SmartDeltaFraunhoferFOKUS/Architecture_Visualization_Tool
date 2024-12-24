@@ -9,15 +9,21 @@ import json
 from numpy import dot
 from numpy.linalg import norm 
 import db_actions
+import glob
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 class create_similarity_heatmap():
     folder_loc = ""
-
+    heat_maps_loc = ""
+    sim_heatmaps_loc = ""
     #similarity threshold based on which the metiric similar_files in the database is counted
     similarity_threshold = 95
 
-    def __init__(self, _folder_loc) -> None:
+    def __init__(self, _folder_loc, _heatmaps_loc, _sim_heatmaps_loc) -> None:
         self.folder_loc = _folder_loc
+        self.heat_maps_loc = _heatmaps_loc
+        self.sim_heatmaps_loc = _sim_heatmaps_loc
 
     def get_log_folder(self):
         return self.folder_loc
@@ -108,8 +114,51 @@ class create_similarity_heatmap():
             sim_per_file = {index:similar_files_count}
             sim_count.update(sim_per_file)
         return sim_count
+    
+    def preprocess_text(self, text):
+        """
+        Preprocess the text by converting to lowercase,
+        removing numbers, and filtering out MAC address-like patterns.
+        """
+        text = text.lower()
+        # Remove numbers
+        text = re.sub(r'\b\d+\b', '', text)
+        # Remove MAC address-like patterns (e.g., "0:a00:20f::" or "::fe80:0:0:0:ac11")
+        text = re.sub(r'([0-9a-fA-F]{1,4}:)+[0-9a-fA-F]{1,4}', '', text)
+        # Remove extra whitespace
+        text = re.sub(r'\s+', ' ', text).strip()
+        return text
+
+    def compute_similarity(self):
+        # Read and preprocess all log files
+        log_contents = []
+        file_names = []
+        #Get all .log files from the folder
+        log_files = glob.glob(os.path.join(self.get_log_folder(), "*.log"))
+        for log_file in log_files:
+            with open(log_file, 'r', encoding='utf-8', errors='ignore') as f:
+                content = f.read()
+                processed_content = self.preprocess_text(content)
+                # Only include files with non-empty content
+                if processed_content:
+                    log_contents.append(processed_content)
+                    file_names.append(os.path.basename(log_file))
+
+        # Check if we have valid content to process
+        if not log_contents:
+            print("No valid log content found after preprocessing. Please check the log files.")
+        else:
+            #Compute TF-IDF matrix
+            vectorizer = TfidfVectorizer()
+            tfidf_matrix = vectorizer.fit_transform(log_contents)
+
+            #Calculate pair-wise cosine similarity
+            similarity_matrix = cosine_similarity(tfidf_matrix)
+            similarity_matrix = np.round(similarity_matrix, 2)
+            return similarity_matrix
 
     def get_similarity_distance(self):
+        """
         overall_dist = []
         all_state_seq_mat = self.get_matrix()
         #now file l2 distance between all matrices.
@@ -121,7 +170,9 @@ class create_similarity_heatmap():
                 cos_sim = (dot(np.array(state_matrix).flatten(), np.array(state_matrix_2).flatten()))/(norm(np.array(state_matrix).flatten())*norm(np.array(state_matrix_2).flatten()))
                 l2_distance_row.append(np.round(cos_sim,2))
             overall_dist.append(l2_distance_row)
-        #print(overall_dist)  
+        """
+        overall_dist = self.compute_similarity()
+        print(overall_dist)  
         #create a pandas dataframe
         pd_df = pd.DataFrame(overall_dist)  
         log_folder = self.get_log_folder()
@@ -134,7 +185,7 @@ class create_similarity_heatmap():
 
     def create_table_json(self, dataframe, log_folder):
         res = {}
-        data = {"z": dataframe}
+        data = {"z": dataframe.tolist()}
         states =  self.get_logs_from_folder(log_folder)
         res.update(data)
         labels = {"x": states}
@@ -142,14 +193,15 @@ class create_similarity_heatmap():
         index = {"y": states}
         res.update(index)
         #to add text
-        text = {"text": dataframe}
+        text = {"text": dataframe.tolist()}
         res.update(text)
         add_text = {"texttemplate": "%{text}"}
         res.update(add_text)
         add_color_scheme = {'colorscale':'Viridis'}
         res.update(add_color_scheme)
         #write to file
-        with open("results/heatmaps.json", "w") as f: 
+        #with open("results/heatmaps.json", "w") as f:
+        with open(self.sim_heatmaps_loc, "w") as f: 
             json.dump(res, f)
         return res
 
@@ -160,7 +212,8 @@ class create_similarity_heatmap():
         for data in dataframe:
             res.append(dict((zip(b,data))))
             #print(res)
-        with open("results/similarity_heatmaps.json", "w") as f:            
+        #with open("results/similarity_heatmaps.json", "w") as f:    
+        with open(self.sim_heatmaps_loc, "w") as f:            
             json_blob = json.dumps(res)
             json.dump(res, f)
         #print(json_blob)

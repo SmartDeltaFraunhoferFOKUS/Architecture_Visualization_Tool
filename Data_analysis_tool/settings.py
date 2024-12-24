@@ -16,13 +16,13 @@ class user_configs():
         self.dbport = config["database"]["port"]
 
         #read dashboard related config
-        self.grafana_url = config["dashboard"]["grafana_url"]
-        self.dashboard_uid= config["dashboard"]["UID"]
-        self.create_dashboard = config["dashboard"]["dashboard_creation"]["create"]
-        self.base_dashboard_location = config["dashboard"]["dashboard_creation"]["dashboard_json_location"]
-        self.dashboard_title = config["dashboard"]["dashboard_creation"]["title"]
-        self.username = config["dashboard"]["username"]
-        self.password = config["dashboard"]["password"]
+        #self.grafana_url = config["dashboard"]["grafana_url"]
+        #self.dashboard_uid= config["dashboard"]["UID"]
+        #self.create_dashboard = config["dashboard"]["dashboard_creation"]["create"]
+        #self.base_dashboard_location = config["dashboard"]["dashboard_creation"]["dashboard_json_location"]
+        #self.dashboard_title = config["dashboard"]["dashboard_creation"]["title"]
+        #self.username = config["dashboard"]["username"]
+        #self.password = config["dashboard"]["password"]
 
 
 states = ["user1.Initial", 

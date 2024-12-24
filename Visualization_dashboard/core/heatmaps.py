@@ -45,16 +45,16 @@ def draw_heatmap(filename:str, db_obj: db_actions.db_adm):
     #plot the heat map. the width and height are from a lot of trials, but they could def. be better :(
     plotly_graph(json.loads(dataframe["data"][0]), json.loads(dataframe["states"][0]), 850, 500)
 
-def draw_similarity_heatmap(foldername:str, db_obj: db_actions.db_adm):
+def draw_similarity_heatmap(folderid:str, db_obj: db_actions.db_adm):
     """
     Draw pairwise similarity of all the files within the selected folder in a heatmap
     Args:
     --------
-    * foldername: selected foldername. Pairwise similarity between all files from the selected folder will be shown
+    * folderid: selected folderid. Pairwise similarity between all files from the selected folder will be shown
     * db_obj: An object that contains database connection.
 
     """  
-    dbquery = "SELECT data, axisinfo from tbl_viz_simheatmaps s, (SELECT folderid FROM tbl_ex_folderinfo fo WHERE foldername = '{0}') fo WHERE s.folderid = fo.folderid;".format(foldername)
+    dbquery = "SELECT data, axisinfo from tbl_viz_simheatmaps s WHERE s.folderid = {0};".format(folderid)
     dataframe = db_actions.execute_table(db_obj.connection, dbquery)
     
     #plot the heat map. Again, the width and height are from a lot of trials, but they could def. be better

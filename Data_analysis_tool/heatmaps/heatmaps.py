@@ -4,13 +4,15 @@ import settings
 import pandas as pd
 import json
 import db_actions
-
+import os 
 class create_heatmaps():
-
+    
+    results_heatmaps_json_location = ""
     log_file_loc = ""
 
-    def __init__(self, _log_file_loc) -> None:
+    def __init__(self, _log_file_loc, heatmaps_json_loca) -> None:
         self.log_file_loc = _log_file_loc
+        self.results_heatmaps_json_location = heatmaps_json_loca
 
     def get_states_sequences(self):
         """
@@ -44,7 +46,7 @@ class create_heatmaps():
         return state_changes_all   
 
     def get_matrix(self):
-      get_all_states = settings.states
+      get_all_states = states
       state_sequences = self.get_states_sequences()
       state_trans_matrix = []
       for source_state in get_all_states:
@@ -97,7 +99,7 @@ class create_heatmaps():
         add_color_scheme = {'colorscale':'Viridis'}
         res.update(add_color_scheme)
         #write to file
-        with open("results/heatmaps.json", "w") as f: 
+        with open(self.results_heatmaps_json_location, "w") as f: 
             json.dump(res, f)
         return res
         
@@ -108,7 +110,7 @@ class create_heatmaps():
         for data in dataframe:
             res.append(dict((zip(b,data))))
             #print(res)
-        with open("results/heatmaps.json", "w") as f:            
+        with open(self.results_heatmaps_json_location, "w") as f:            
             json_blob = json.dumps(res)
             json.dump(res, f)
         #print(json_blob)

@@ -13,6 +13,8 @@ import re
 import os
 import base64
 import zlib
+import pandas as pd
+from st_aggrid import AgGrid, GridOptionsBuilder
 
 #supported ceps functionalities
 class cep_dev(Enum):
@@ -29,6 +31,8 @@ def draw_sm_events_map():
     cmd = ""    
     tmp_dir="/tmp"
     tmp_files = []
+    file_names = []
+    file_sizes = []
     if(len(uploaded_files)>0):
     #with tempfile.TemporaryDirectory() as tmp_dir:
         for uploaded_file in uploaded_files:
@@ -36,15 +40,20 @@ def draw_sm_events_map():
                 filename = uploaded_file.name
                 file_path = f'{tmp_dir}/{filename}'
                 tmp_files.append(file_path)
+                file_names.append(filename)
                 #st.write("filename:", uploaded_file.name)
                 #st.write(bytes_data)
                 with open(file_path, 'wb') as file:
                     file.write(bytes_data)
+                file_stat = os.stat(file_path)
+                file_sizes.append(file_stat.st_size/1024)
         #for tmp_files in tmp_files:
         #    print(f'{tmp_files}')
         #get output from ceps, rightnow, just handle the events map diagram
         file_state_mch_map, mermaid_statements = execute_cmd(tmp_files, cep_dev.events_mapping)        
         #st.write(mermaid_statements)
+        data = {"FileName": file_names, "filesize": file_sizes}
+        #draw_fileinfo_aggrid(data)
         draw_mermaid_diagram(mermaid_statements)
         
 def find_keys_by_value(dictionary, target_value):

@@ -1,6 +1,7 @@
 __author__ = "Fraunhofer Fokus"
 __version__ = "0.1.0"
 
+import os
 import argparse
 from math import fabs
 #from tkinter.tix import ACROSSTOP
@@ -21,14 +22,24 @@ import mysql.connector
 from mysql.connector import Error
 import operator
 import datetime
+import log2diagram as lgd
 
+#i want to store results within AVT/results
+current_directory = os.path.dirname(os.path.abspath(__file__))
+results_directory = os.path.join(current_directory, 'results')
 #text_file_location=r"results/output.txt"
 #location to save mmd files 
-mermaid_formatted_statess_file = r"results/mermaid_states.mmd"
-mermaid_formatted_log_file = r"results/mermaid_sequence.mmd"
+#mermaid_formatted_statess_file = r"results/mermaid_states.mmd"
+#mermaid_formatted_log_file = r"results/mermaid_sequence.mmd"
+
+mermaid_formatted_statess_file = os.path.join(results_directory, 'mermaid_states.mmd')
+mermaid_formatted_log_file = os.path.join(results_directory, 'mermaid_sequence.mmd')
+heatmap_loc = os.path.join(results_directory, 'heatmaps.json')
+sim_heatmap_loc = os.path.join(results_directory, 'similarity_heatmaps.json')
 
 #dashboard config file location
 config_file_loc = r"config/dash_config.yaml"
+PUML_JAR_LOCATION = r"plantuml.jar"
 
 #header text for mermaid diagram
 mermaid_diagram_type_umlstates = "stateDiagram-v2 "
@@ -143,7 +154,7 @@ def parseCommandLine():
 
 def compute_sim_heatmap(folder_loc, folderid, db_obj):
     #generate similarity matrix of heatmaps            
-    gen_matrix = sim.create_similarity_heatmap(folder_loc)
+    gen_matrix = sim.create_similarity_heatmap(folder_loc, heatmap_loc, sim_heatmap_loc)
     #insert to states db
     #hp.write_states_to_db(settings.states, fileid, db_obj)
     mat_datafram, file_sim_dict, similarity_heatmap_table_blob = gen_matrix.get_similarity_distance()
@@ -177,35 +188,43 @@ def begin_compute(file_list, folder_loc, folderid, user_config, db_obj):
                 mermaid_statements= mermaid_statements)
         elif(file_extension == "log"):
             #generate sequence diagrams
-            mermaid_file_loc = mermaid_formatted_log_file
-            seq2diagram = sq.seq2diagram()    
-            mermaid_statements= seq2diagram.parse_file(text_file_location)
-            diagram_type = mermaid_diagram_type_umlsequence
-            draw_string = dp.generate_mermaid_diagram(
-                mermaid_diagram_type=diagram_type, 
-                mermaid_formatted_file= mermaid_file_loc, 
-                mermaid_statements= mermaid_statements)
+            #mermaid_file_loc = mermaid_formatted_log_file
+            #seq2diagram = sq()     
+            #mermaid_statements= seq2diagram.parse_file(text_file_location)
+            #diagram_type = mermaid_diagram_type_umlsequence
+            #draw_string = generate_mermaid_diagram(
+            #    mermaid_diagram_type=diagram_type, 
+            #    mermaid_formatted_file= mermaid_file_loc, 
+            #    mermaid_statements= mermaid_statements)
             #insert mermaid statements to db
-            dbquery = "INSERT INTO tbl_viz_seqdiagram (fileid, mmd) VALUES ({0},'{1}')".format(fileid, draw_string.replace("\n", "\\\n"))
-            db_actions.execute_non_query(db_obj.connection, dbquery)
+            #dbquery = "INSERT INTO tbl_viz_seqdiagram (fileid, mmd) VALUES ({0},'{1}')".format(fileid, draw_string.replace("\n", "\\\n"))
+            #execute_non_query(db_obj.connection, dbquery)
             #generate heatmaps
-            get_heat_map = hp.create_heatmaps(text_file_location)
-            pd_dataframe, heatmap_table_blob = get_heat_map.create_heatmaps_frame()
-            print("generated heatmap:", pd_dataframe)
+            #get_heat_map = hp.create_heatmaps(text_file_location, heatmap_loc)
+            #pd_dataframe, heatmap_table_blob = get_heat_map.create_heatmaps_frame()
+            #print("generated heatmap:", pd_dataframe)
 
             #now insert to heatmaps db. here heatmap_table_blob is a json/dict of form {"z":.... "y":.... "x":..."text":..."colorscale":...}
-            hp.write_map_to_db(heatmap_table_blob, settings.states, fileid, db_obj)
+            #hp.write_map_to_db(heatmap_table_blob, states, fileid, db_obj)
             #generate similarity matrix of heatmaps        
             #gen_matrix = hp.similarity_heatmap(text_file_location)
             #mat_datafram, similarity_heatmap_table_blob = gen_matrix.get_similarity_distance()
-            #print("generated similarity heatmap:", mat_datafram)          
+            #print("generated similarity heatmap:", mat_datafram)    
+            log2diagram = lgd.log2diagram(text_file_location)
+            puml_statements = log2diagram.get_state_tranisition_info()
+            svg_data = log2diagram.generate_svg(puml_statements, PUML_JAR_LOCATION)
+            dbquery = "INSERT INTO tbl_viz_state_diagram (fileid, puml, svg_data) VALUES ({0},'{1}', '{2}')".format(fileid, puml_statements.replace("\n", "\\\n"), svg_data)
+            db_actions.execute_non_query(db_obj.connection, dbquery)
+            print("written puml to the db")                  
         else:
             print("File type not supported: {0}. Skipped this file...".format(text_file_location))
         #send the generated data to dashboard for visualization
         #dashboard.create_update_dashboard(user_config, mermaid_file_loc, diagram_type, heat_tbl_blob=heatmap_table_blob, sim_heat_tbl_blob=similarity_heatmap_table_blob)
     
     #compute similarity heatmap from the input folder
+    print("computing sim heatmap")
     compute_sim_heatmap(folder_loc, folderid, db_obj)
+    print("sim heatmap computed")
 
 def check_folder_empty(folder_loc):
     folder_empty = True
@@ -215,7 +234,7 @@ def check_folder_empty(folder_loc):
             if(filename.endswith(".log")):
                 folder_empty = False
                 break
-    return folder_empty           
+    return folder_empty  
 
 def main():
     """
