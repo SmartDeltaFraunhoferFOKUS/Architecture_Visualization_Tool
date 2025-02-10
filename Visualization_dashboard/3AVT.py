@@ -1,5 +1,5 @@
 __author__ = "Fraunhofer Fokus"
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 #import streamlit dependencies
 import streamlit as st

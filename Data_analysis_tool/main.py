@@ -5,19 +5,18 @@ import os
 import argparse
 from math import fabs
 #from tkinter.tix import ACROSSTOP
-import display_graph as dp
+from display_graph import *
 import os
-import dashboard.dashboard as dashboard
-import intrepret_trace  as it
-import settings
-import ceps2diagram as ceps
-import seq2diagram as sq
+#import intrepret_trace  as it
+from settings import *
+from ceps2diagram import ceps2diagram as cp
+from seq2diagram import seq2diagram  as sq
 import yaml
 import json
 from heatmaps import heatmaps as hp
-from  heatmaps import similarity_heatmap as sim
+from heatmaps import similarity_heatmap as sim
 from os import walk
-import db_actions
+from  db_actions import * 
 import mysql.connector
 from mysql.connector import Error
 import operator
@@ -54,22 +53,22 @@ def check_files_folder(folderid, dbobj):
     #   1. Any file could have been modified in the folder so  need to compute diagrams for all
     
     db_query = "SELECT fileid from tbl_ex_fileinfo WHERE folderid IN ({0})".format(folderid)
-    records = db_actions.execute_query(dbobj.connection, db_query)
+    records = execute_query(dbobj.connection, db_query)
     print("file in folder:", records)
     if(len(records)>0):
         print("files from input folder detected in db. Removing records", records)
         #db_query = "DELETE FROM tbl_dia_states WHERE fileid = %s"
         #db_actions.execute_non_query(dbconn=dbobj.connection, query=db_query, filelist=records)
         db_query = "DELETE FROM tbl_viz_qualitymetrics WHERE fileid = %s"
-        db_actions.execute_non_query(dbconn=dbobj.connection, query=db_query, filelist=records)
+        execute_non_query(dbconn=dbobj.connection, query=db_query, filelist=records)
         db_query = "DELETE FROM tbl_viz_heatmaps WHERE fileid = %s;"
-        db_actions.execute_non_query(dbconn=dbobj.connection, query=db_query, filelist=records)
+        execute_non_query(dbconn=dbobj.connection, query=db_query, filelist=records)
         db_query = "DELETE FROM tbl_viz_seqdiagram WHERE fileid = %s"
-        db_actions.execute_non_query(dbconn=dbobj.connection, query=db_query, filelist=records)
+        execute_non_query(dbconn=dbobj.connection, query=db_query, filelist=records)
         db_query = "DELETE FROM tbl_ex_fileinfo WHERE fileid = %s"
-        db_actions.execute_non_query(dbconn=dbobj.connection, query=db_query, filelist=records)
+        execute_non_query(dbconn=dbobj.connection, query=db_query, filelist=records)
         db_query = "DELETE FROM tbl_viz_simheatmaps WHERE folderid in ({0})".format(folderid)
-        db_actions.execute_non_query(dbconn=dbobj.connection, query=db_query)
+        execute_non_query(dbconn=dbobj.connection, query=db_query)
 
 
 def get_file_meta(full_file_path):
@@ -104,12 +103,12 @@ def get_files_from_folder(inp_folder, folderid,  db_obj):
                 full_file_name = os.path.join(dirpath,filename)
                 #print(full_file_name)
                 meta = get_file_meta(full_file_name)
-                insert_query = "INSERT INTO tbl_ex_fileinfo (filename, filelocation, folderid, createddate,modifieddate) VALUES ('{0}', '{1}', {2}, '{3}', '{4}')".format(filename, full_file_name.replace("\\", "\\\\"), folderid, meta["created_date"], meta["modified_date"])           
+                insert_query = "INSERT INTO tbl_ex_fileinfo (filename, filelocation, folderid, createddate,modifieddate) VALUES ('{0}', '{1}', {2}, '{3}', '{4}') RETURNING fileid".format(filename, full_file_name.replace("\\", "\\\\"), folderid, meta["created_date"], meta["modified_date"])           
                 print(insert_query)
-                id_inserted = db_actions.execute_non_query(db_obj.connection, insert_query)
+                id_inserted = execute_non_query(db_obj.connection, insert_query)
                 filesize_kb= round(os.path.getsize(full_file_name)/1024,2)
                 insert_size_query = "INSERT INTO tbl_viz_qualitymetrics (fileid, filesize) VALUES ({0},{1})".format(id_inserted, filesize_kb)
-                db_actions.execute_non_query(db_obj.connection, insert_size_query)
+                execute_non_query(db_obj.connection, insert_size_query)
                 f.append({id_inserted: full_file_name}) 
     return f
 
@@ -128,7 +127,7 @@ def get_config(config_file_loc):
     """
     with open(config_file_loc, "r") as stream:
         try:
-            user_config = settings.user_configs(yaml.safe_load(stream))
+            user_config = user_configs(yaml.safe_load(stream))
             return user_config 
         except yaml.YAMLError as exc:
             print(exc)
@@ -175,14 +174,14 @@ def begin_compute(file_list, folder_loc, folderid, user_config, db_obj):
             save_to = r"results/output.txt"
             mermaid_file_loc = mermaid_formatted_statess_file
             #pass the ceps through intrepreter to get the s-experssions
-            ceps2diagram = ceps.ceps2diagram()
+            ceps2diagram = cp()
             ceps2diagram.generate_text_file(text_file_location, save_to)       
             #get mermaid statements
             mermaid_statements =  ceps2diagram.get_statements(text_file_location)       
             print("Finished mermaid statements...")
             #generate mermaid diagram
             diagram_type= mermaid_diagram_type_umlstates
-            dp.generate_mermaid_diagram(
+            generate_mermaid_diagram(
                 mermaid_diagram_type=diagram_type, 
                 mermaid_formatted_file= mermaid_file_loc, 
                 mermaid_statements= mermaid_statements)
@@ -214,7 +213,7 @@ def begin_compute(file_list, folder_loc, folderid, user_config, db_obj):
             puml_statements = log2diagram.get_state_tranisition_info()
             svg_data = log2diagram.generate_svg(puml_statements, PUML_JAR_LOCATION)
             dbquery = "INSERT INTO tbl_viz_state_diagram (fileid, puml, svg_data) VALUES ({0},'{1}', '{2}')".format(fileid, puml_statements.replace("\n", "\\\n"), svg_data)
-            db_actions.execute_non_query(db_obj.connection, dbquery)
+            execute_non_query(db_obj.connection, dbquery)
             print("written puml to the db")                  
         else:
             print("File type not supported: {0}. Skipped this file...".format(text_file_location))
@@ -236,30 +235,54 @@ def check_folder_empty(folder_loc):
                 break
     return folder_empty  
 
+
+def parseCommandLine():
+    """
+    Parse the command line. Input and output file specification from the user are parsed.
+    Help for the command-line is also supported.
+    """
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-i', '--input-folder',
+                        #type=argparse.FileType('r'),
+                        required=True,
+                        help='Everything within this folder will be processed for visualization')
+    
+    # Specify output of "--version"
+    parser.add_argument(
+        "--version",
+        action="version",
+        version="%(prog)s (version {version})".format(version=__version__))
+
+    return parser.parse_args()
+
 def main():
     """
     Start processing the input.
     """
     # Parse the traces    
+    print("start processing input")
     args = parseCommandLine()    
     #read dashboard and database config from a yaml file
     user_config = get_config(config_file_loc)
     #create a database connection
-    db_obj = db_actions.db_adm(user_config.dbhost, user_config.dbusername, user_config.dbpassword, user_config.dbname)
+    print("got user config")
+    db_obj = db_adm(user_config.dbhost, user_config.dbusername, user_config.dbpassword, user_config.dbname, user_config.dbport)
     #get the type of the file (ceps or log), 
     folder_loc = args.input_folder.strip()
+    
+    print("folder location", folder_loc)
     folder_empty = check_folder_empty(folder_loc)
     if(folder_empty):
         raise Exception("Selected folder does not have any log files. Skipping processing...")
-
+    print("the given location", folder_loc)
     #insert folder to db
     dbquery = "SELECT folderid from tbl_ex_folderinfo WHERE folderlocation = '{0}'".format(folder_loc.replace("\\", "\\\\"))
-    record = db_actions.execute_query(db_obj.connection, dbquery)
+    record = execute_query(db_obj.connection, dbquery)
     #insert to db if the folder does not already exist
     if(len(record)==0):
         print("New folder detected. Inserting to db.")
-        dbquery = "INSERT INTO tbl_ex_folderinfo (foldername, folderlocation) VALUES ('{0}', '{1}')".format(os.path.basename(folder_loc), folder_loc.replace("\\", "\\\\"))
-        folderid = db_actions.execute_non_query(db_obj.connection, dbquery)
+        dbquery = "INSERT INTO tbl_ex_folderinfo (foldername, folderlocation) VALUES ('{0}', '{1}') RETURNING folderid;".format(os.path.basename(folder_loc), folder_loc.replace("\\", "\\\\"))
+        folderid = execute_non_query(db_obj.connection, dbquery)
     else:
         #if the select query returned more than 1 tuples then this means that there are multiple folders of same location in db. 
         if (len(record) > 1):
@@ -271,6 +294,7 @@ def main():
     files_list = get_files_from_folder(folder_loc, folderid, db_obj)  
     if(len(files_list) >0):
         begin_compute(files_list, folder_loc, folderid, user_config, db_obj)
+        print("process complete")
     else:
         print("Logs not found inside selected folder...")
 

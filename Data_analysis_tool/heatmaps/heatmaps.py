@@ -1,9 +1,9 @@
 import re
-import intrepret_trace as it
-import settings
+from intrepret_trace import * 
+from  settings import *
 import pandas as pd
 import json
-import db_actions
+from db_actions import *
 import os 
 class create_heatmaps():
     
@@ -28,12 +28,12 @@ class create_heatmaps():
             #state_change_in_line = []
             init_state = next_state = ""
             for state in states_trans:
-                if(re.match(it.trace_pattern_state, state)):
+                if(re.match(trace_pattern_state, state)):
                     #only select messages that are state changes 
-                    m = re.match(it.state_from, state)
+                    m = re.match(state_from, state)
                     if(m is not None):
                         init_state = m.group("state_from")
-                    m = re.match(it.state_to, state)
+                    m = re.match(state_to, state)
                     if(m is not None):
                         next_state = m.group("state_to")     
                     if(len(init_state) >0 and len(next_state)>0):
@@ -63,7 +63,7 @@ class create_heatmaps():
     def create_heatmaps_frame(self):
         dataframe = self.get_matrix()
         df = pd.DataFrame(dataframe)
-        df.columns= df.index = settings.states
+        df.columns= df.index = states
         print("heatmap:", df)
         #TODO: saving as table is not correct
         table_json = self.create_data_table(dataframe)
@@ -87,9 +87,9 @@ class create_heatmaps():
         res = {}
         data = {"z": dataframe}
         res.update(data)
-        labels = {"x": settings.states}
+        labels = {"x": states}
         res.update(labels)
-        index = {"y": settings.states}
+        index = {"y": states}
         res.update(index)
         #to add text
         text = {"text": dataframe}
@@ -105,7 +105,7 @@ class create_heatmaps():
         
 
     def create_table_json_old(self, dataframe):
-        b = settings.states
+        b = states
         res = []
         for data in dataframe:
             res.append(dict((zip(b,data))))
@@ -124,7 +124,7 @@ def write_states_to_db(states, fileid, db_obj):
     states_string = states_string[:-1] + "]"
     #insert to db
     dbquery = "INSERT INTO tbl_viz_states (fileid, states) VALUES ({0},'{1}')".format(fileid, states_string) 
-    db_actions.execute_non_query(db_obj.connection, dbquery)
+    execute_non_query(db_obj.connection, dbquery)
 
 def write_map_to_db(jsonblob, states, fileid, db_obj):
     #create string from list
@@ -134,7 +134,7 @@ def write_map_to_db(jsonblob, states, fileid, db_obj):
     states_string = states_string[:-2] + "]" #trim the final comma and space
     print("states_string.....", states_string)
     dbquery = "INSERT INTO tbl_viz_heatmaps (fileid, data, states) VALUES ({0},'{1}', '{2}')".format(fileid, list(jsonblob.values())[0], states_string)            
-    db_actions.execute_non_query(db_obj.connection, dbquery)  
+    execute_non_query(db_obj.connection, dbquery)  
 
 
 if __name__ == '__main__':

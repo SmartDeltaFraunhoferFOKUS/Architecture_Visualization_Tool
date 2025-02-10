@@ -1,8 +1,9 @@
 __author__ = "Fraunhofer Fokus"
 __version__ = "0.1.0"
 
-import mysql.connector
-from mysql.connector import Error
+import psycopg2
+#mport mysql.connector
+#from mysql.connector import Error
 import pandas as pd
 import time
 
@@ -39,77 +40,107 @@ class db_adm():
         self.user = _user
         self.password = _password
         self.port = _port
-        #self.connection = self.get_connection()
-        self.connection = self.connection_to_db(_database)
+        self.database = _database
+        self.connection = self.connection_to_db()
 
-    def get_connection(self):
+    def connection_to_db(self):
         """
-        Creates a server connection. The connection is non-db specific, it queries using this connection will require to provide database name in the query during query execution
-
-        Returns:
-        ------------
-        * connection: a connection type object
-        """
-        #create a connection to connect to the mysql server
-        try:
-            connection = mysql.connector.connect(host= self.host,
-                                                    user= self.user,
-                                                    password= self.password,
-                                                    port= self.port)
-            if connection.is_connected():
-                db_info = connection.get_server_info()
-                print("Connected to MySQL Server version ", db_info)
-                #cursor = connection.cursor()
-                return connection
-        except Error as e:
-            print("Error while connecting to MySQL", e)
-
-    def connection_to_db(self, _database):
-        """
-        Creates a connection a specific db in the server instance. 
-        
-        **The connection is db specific, queries using this connection will be executed in the database defined when creating this connection**
+        Creates a connection to a specific database in the PostgreSQL server.
+        Retries if the connection fails. 
 
         Returns:
         ------------
-        * connection: a connection type object
+        * connection: a connection object
         """
-        while(self.retry != 0):
+        #here retry is 1 because if connection is not there in first try there wont likely be conditions where app will gain usable connection later
+        #but in streamlit since sometimes streamlit takes time just to reconise connection, use retry > 1 but only in streamlit
+        while self.retry > 0:
             try:
-                connection = mysql.connector.connect(host= self.host,
-                                                        user= self.user,
-                                                        password= self.password,
-                                                        database= _database,
-                                                        port= self.port)
-                if connection.is_connected():
-                    db_info = connection.get_server_info()
-                    print("Connected to MySQL Server version ", db_info)
-                    cursor = connection.cursor()
-                    cursor.execute("select database();")
-                    record = cursor.fetchone()
-                    print("Connected to database: ", record)
-                    return connection
-            except Error as e:
-                self.retry = self.retry - 1 
-                time.sleep(10)
-                print("Error while connecting to MySQL...Retrying..", e)
-                self.connection_to_db(_database)
-        if(self.retry == 0):
-            print("Failed to connect to db.")
+                connection = psycopg2.connect(
+                    host=self.host,
+                    user=self.user,
+                    password=self.password,
+                    database=self.database,
+                    port=self.port
+                )
+                print("Connected to the PostgreSQL Database.")
+                return connection
+            except Exception as e:
+                self.retry -= 1
+                time.sleep(5)
+                print(f"Error connecting to database. Retrying... ({self.retry} attempts left): {e}")
 
+        raise ConnectionError("Failed to connect to the database after multiple attempts.")
 
-    def close_conn(self, _dbconn, _cursor):
+    def close_conn(self):
         """
-        Close db connection
-
-        Args:
-        * _dbconn: a working database connection
-        * _cursor: a cursor
+        Close the database connection.
         """
-        if self._dbconn.is_connected():
-            _cursor.close()
-            _dbconn.close()
-            print("MySQL connection is closed...")
+        if self.connection and not self.connection.closed:
+            self.connection.close()
+            print("PostgreSQL connection is closed.")
+
+
+def execute_non_query(dbconn, query, filelist=None):
+    """
+    Executes INSERT or UPDATE queries.
+
+    Args:
+    --------
+    * dbconn: a working db connection
+    * query: query string
+    * filelist: list of tuples to perform the query against
+
+    Returns:
+    ------------
+    Last row ID entered by the query
+    """
+    try:
+        cursor = dbconn.cursor()
+        if filelist is None:
+            cursor.execute(query)
+        else:
+            cursor.executemany(query, filelist)
+        dbconn.commit()
+        print("Query executed successfully!")
+        print("query", query)
+        #print("cursor.lastrowid", cursor.fetchone()[0])
+        #return cursor.fetchone()[0] if cursor.rowcount > 0 else None
+        if("returning" in query.lower()):
+            return cursor.fetchone()[0]
+        else:
+            return None
+    except Exception as e:
+        print(f"Error executing non-query: {e}")
+        dbconn.rollback()
+    finally:
+        cursor.close()
+
+
+def execute_query(dbconn, query):
+    """
+    Executes SELECT queries and returns the result as a list of tuples.
+
+    Args:
+    --------
+    * dbconn: a working db connection
+    * query: query string
+
+    Returns:
+    ------------
+    List of tuples containing the query results
+    """
+    try:
+        cursor = dbconn.cursor()
+        cursor.execute(query)
+        result = cursor.fetchall()
+        return result
+    except Exception as e:
+        print(f"Error executing query: {e}")
+    finally:
+        cursor.close()
+
+
 
 """
 def execute_non_query(dbconn, query, database=None):
@@ -117,7 +148,7 @@ def execute_non_query(dbconn, query, database=None):
         if(dbconn.is_connected):
             cursor = dbconn.cursor()
             if(database is not None):  
-                query = "USE {0}; {1}".format(database, query)
+                query = "{1}".format(database, query)
                 cursor.execute(query)
                 dbconn.commit()
                 #cursor.close()
@@ -131,91 +162,23 @@ def execute_non_query(dbconn, query, database=None):
         #return last insert id"""
 
 
-def execute_non_query(dbconn, query, filelist = None, database=None):
-        """
-        Execute insert and update type queries.
-
-        Args:
-        --------
-        * dbconn: a working db or server connection
-        * query: query string
-        * filelist: list of ids to perform the query against. this is a list of tuples [(id1,), (id2,)] or a tuple of form (id,) 
-        * database: when this argument is provided, query will be fired in the specifid database
-
-        Returns:
-        ------------
-        lastrowid entered by the query
-        """
-        if(dbconn.is_connected):
-            cursor = dbconn.cursor()
-            if(database is not None):  
-                query = "USE {0}; {1}".format(database, query)
-            
-            if(filelist is None):
-                cursor.execute(query)
-            else:
-                print("fileid list is not none")
-                cursor.executemany(query, filelist)
-            dbconn.commit()
-            _id = cursor.lastrowid
-            return _id
-        else:               
-            print("Could not connect to mysql db. Please make sure the connection is open...") 
-        #return last insert id
-        
-
-def execute_query(dbconn, query, database=None):
-        """
-        Execute query that returns tuples list eg. SELECT statement. Use when there is not need to get dataframes 
-
-        Args:
-        --------
-        * dbconn: a working db or server connection
-        * query: query string
-        * database: when this argument is provided, query will be fired in the specifid database
-
-        Returns:
-        ------------
-        list of tuples as result of query
-        """
-        
-        if(dbconn.is_connected):
-            cursor = dbconn.cursor(buffered=True)
-            if(database is not None):        
-                cursor.execute("USE {0}; {1}".format(database, query))
-            else:                
-                cursor.execute(query)
-            res =  cursor.fetchall()
-            if (res is not None):
-                for row in res:
-                    print(row)
-            print(res)
-            return res
-        else:
-            print("Could not find an open database conneciton. Please make sure you are connected to the specified db...")
-
 def execute_table(dbconn, query, database=None):        
-        """
-        Execute query to return pandas dataframes
-
-        Args:
-        --------
-        * dbconn: a working db or server connection
-        * query: query string
-        * database: when this argument is provided, query will be fired in the specifid database
-
-        Returns:
-        ------------
-        A pandas dataframe containing the reults of the query
-        """
-
-        if(dbconn.is_connected):
-            cursor = dbconn.cursor(buffered=True)
-            if(database is not None):        
-                query = "USE {0}; {1}".format(database, query)
-
-            res =  pd.read_sql(query, dbconn)
-            return res
+    try:
+        # Check if the connection is open
+        if dbconn.closed == 0:
+            # Switch database/schema if specified
+            if database is not None:
+                with dbconn.cursor() as cursor:
+                    cursor.execute(f"SET search_path TO {database};")
+            
+            # Use Pandas to execute the query and fetch results
+            df = pd.read_sql(query, dbconn)
+            print("Query executed successfully.")
+            return df
         else:
-            print("Could not find an open database conneciton. Please make sure you are connected to the specified db...")
+            print("Database connection is closed. Please ensure the connection is active.")
+            return None
+    except Exception as e:
+        print(f"Error executing query: {e}")
+        return None
 

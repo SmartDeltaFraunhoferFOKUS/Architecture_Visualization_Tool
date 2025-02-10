@@ -7,8 +7,8 @@ import re
 #import display_graph as dp
 import os
 #import dashboard.dashboard as dashboard
-import intrepret_trace  as it
-import settings
+from intrepret_trace import *
+#import settings
 #import build_diagram_abs as build_diagram
 
 delimeter = "\u25B6"
@@ -19,7 +19,7 @@ class ceps2diagram():
         statements= []        
         #pattern = r"(?P<from_state>\w+)\-(?P<trigger>\w*)\-\u25B6(?P<to_state>\w+)"
         for transition in complete_trans:
-            m = re.match(it.pattern, transition)
+            m = re.match(pattern, transition)
             #print(m.groupdict())
             #print(m.groups())
             state_from = m.group("from_state")

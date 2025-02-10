@@ -1,10 +1,10 @@
 #The configurations here define the configurations 
 database:
     host: localhost
-    db_name: smartdelta__pcd
-    username: root
+    db_name: smartdelta_pcd
+    username: postgres
     password: sandman
-    port: 3306
+    port: 5432
 dashboard:
     #dashboard UID. 
     UID: YZGTzKl4kfr #yZGTzKl4kfr

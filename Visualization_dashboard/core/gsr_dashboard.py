@@ -38,7 +38,7 @@ def get_session_list(db_obj:db_actions.db_adm) -> pd.DataFrame:
     * records: a pandas dataframe that contains columns: ID, filename, svg_file as svg_file  FROM tbl_ex_similarity_info
     
     """
-    dbquery = "SELECT ID, filename, CreatedDate FROM tbl_ex_similarity_info"
+    dbquery = "SELECT id, filename, createddate FROM tbl_ex_similarity_info"
     records = db_actions.execute_table(db_obj.connection, dbquery)
     return records
     
@@ -70,14 +70,14 @@ def draw_fileinfo_aggrid(pd_dataframe:pd.DataFrame):
     builder.configure_selection(selection_mode='single', use_checkbox=True)
     #builder.configure_pagination(enabled=True, paginationPageSize=5)
     #builder.configure_column('System Name', editable=False)
-    builder.configure_column("ID", header_name="ID")
+    builder.configure_column("id", header_name="ID")
     builder.configure_column("filename",  header_name="Session Name")
-    builder.configure_column("CreatedDate", type=["customDateTimeFormat"], custom_format_string='yyyy-MM-dd', header_name="Created Date")
+    builder.configure_column("createddate", type=["customDateTimeFormat"], custom_format_string='yyyy-MM-dd', header_name="Created Date")
     grid_options = builder.build()
 
     return_value = AgGrid(df, gridOptions=grid_options, height=250, width=150)
     if return_value['selected_rows']:
-        fileID = return_value['selected_rows'][0]['ID']
+        fileID = return_value['selected_rows'][0]['id']
         return fileID
     else:
         return None
@@ -99,7 +99,7 @@ def show_diagrams(selected_file: str, db_obj: db_actions.db_adm):
     draw_delta_diagram(selected_file, db_obj)
 
 def draw_delta_diagram(selected_file, db_obj):
-    query = f"SELECT svg_data_usm, svg_data_dbsm FROM tbl_ex_similarity_info WHERE ID = {selected_file}"
+    query = f"SELECT svg_data_usm, svg_data_dbsm FROM tbl_ex_similarity_info WHERE id = {selected_file}"
     svg_data = db_actions.execute_table(db_obj.connection, query)
 
     if svg_data.empty:

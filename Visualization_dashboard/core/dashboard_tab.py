@@ -39,7 +39,7 @@ def get_folder_list(db_obj:db_actions.db_adm) -> pd.DataFrame:
     * records: a pandas dataframe that contains columns: folderid as fid, foldername, folderlocation FROM tbl_ex_folderinfo
     
     """
-    folder_dbquery = "SELECT folderid as fid, foldername, folderlocation FROM tbl_ex_folderinfo"
+    folder_dbquery = "SELECT folderid as \"fid\", foldername, folderlocation FROM tbl_ex_folderinfo"
     records = db_actions.execute_table(db_obj.connection, folder_dbquery)
     return records
 
@@ -56,8 +56,9 @@ def get_file_list(folderid: str, db_obj:db_actions.db_adm) -> pd.DataFrame:
     -----------
     * records: a pandas dataframe that contains columns: fileid, FileName, CreatedDate, ModifiedDate, SimilarityCount, and filesize FROM tbl_ex_fileinfo and tbl_viz_qualitymetrics for listing in the grid in the UI    
     """
-    filelist_dbquery = "SELECT fi.fileid, filename as FileName, createddate as CreatedDate, modifieddate as ModifiedDate, simfilecount as SimilarityCount, filesize FROM tbl_ex_fileinfo fi, tbl_viz_qualitymetrics qm  WHERE fi.folderid = {0} and qm.fileid = fi.fileid".format(folderid)
+    filelist_dbquery = "SELECT fi.fileid, filename as \"FileName\", createddate as \"CreatedDate\", modifieddate as \"ModifiedDate\", simfilecount as \"SimilarityCount\", filesize FROM tbl_ex_fileinfo fi, tbl_viz_qualitymetrics qm  WHERE fi.folderid = {0} and qm.fileid = fi.fileid".format(folderid)
     records = db_actions.execute_table(db_obj.connection, filelist_dbquery)
+    print(records)
     return records
     
 def draw_fileinfo_aggrid(pd_dataframe:pd.DataFrame):
@@ -86,18 +87,24 @@ def draw_fileinfo_aggrid(pd_dataframe:pd.DataFrame):
     #builder.configure_pagination(enabled=False)
     #builder.configure_auto_height(autoHeight= True)
     builder.configure_selection(selection_mode='single', use_checkbox=True)
-    #builder.configure_pagination(enabled=True, paginationPageSize=5)
+    builder.configure_pagination(enabled=True, paginationAutoPageSize=False, paginationPageSize=10)  # Enable pagination
     #builder.configure_column('System Name', editable=False)
     builder.configure_column("CreatedDate", type=["customDateTimeFormat"], custom_format_string='yyyy-MM-dd', header_name="Created Date")
     builder.configure_column("ModifiedDate", type=["customDateTimeFormat"], custom_format_string='yyyy-MM-dd', header_name="Modified Date")
     builder.configure_column("SimilarityCount", header_name="Similarity Count")
     builder.configure_column("filesize", header_name="File Size (KB)")
-    builder.configure_column("FileName", header_name="File Name")
+    builder.configure_column("FileName", header_name="FileName")
     grid_options = builder.build()
 
-    return_value = AgGrid(df, gridOptions=grid_options, height=300, width=500)
+    #if height is specified here then this will override pagination settings and pagination will not work. Pagination needs auto height,
+    #return_value = AgGrid(df, gridOptions=grid_options, height=300, width=500)
+    #col1, col3 = st.columns([5, 1])  # Adjust column widths as needed
+    #with col1:
+    return_value = AgGrid(df, gridOptions=grid_options, width=500, domLayout='normal')
+    print("re",return_value['selected_rows'])
     if return_value['selected_rows']:
         filename = return_value['selected_rows'][0]['FileName']
+        print("selected filename", filename)
         return filename
     else:
         return None

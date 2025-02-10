@@ -2,13 +2,13 @@ import re
 import numpy as np
 from os import walk
 import os
-import intrepret_trace as it
-import settings
+from intrepret_trace import * 
+from settings import *
 import pandas as pd
 import json
 from numpy import dot
 from numpy.linalg import norm 
-import db_actions
+from db_actions import *
 import glob
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -53,12 +53,12 @@ class create_similarity_heatmap():
                 #state_change_in_line = []
                 init_state = next_state = ""
                 for state in states_trans:
-                    if(re.match(it.trace_pattern_state, state)):
+                    if(re.match(trace_pattern_state, state)):
                         #only select messages that are state changes 
-                        m = re.match(it.state_from, state)
+                        m = re.match(state_from, state)
                         if(m is not None):
                             init_state = m.group("state_from")
-                        m = re.match(it.state_to, state)
+                        m = re.match(state_to, state)
                         if(m is not None):
                             next_state = m.group("state_to")        
                     
@@ -70,7 +70,7 @@ class create_similarity_heatmap():
         return (logs_all)
 
     def get_matrix(self):
-        get_all_states = settings.states
+        get_all_states = states
         all_state_sequences = self.get_states_sequences()
         all_state_seq_mat = []
         for state_sequences in all_state_sequences:
@@ -207,7 +207,7 @@ class create_similarity_heatmap():
 
 
     def create_table_json_old(self, dataframe):
-        b = settings.states
+        b = states
         res = []
         for data in dataframe:
             res.append(dict((zip(b,data))))
@@ -228,13 +228,13 @@ def write_sim_map_to_db(folerid, data, logfile_names, db_obj):
     print("axis_sttring....", axis_string)
     #insert to db
     dbquery = "INSERT INTO tbl_viz_simheatmaps (folderid, data, axisinfo) VALUES ({0},'{1}', '{2}')".format(folerid, data, axis_string) 
-    db_actions.execute_non_query(db_obj.connection, dbquery)
+    execute_non_query(db_obj.connection, dbquery)
 
-def write_filesim_value_to_db(file_sim_count_dict: dict, db_obj:db_actions.db_adm):
+def write_filesim_value_to_db(file_sim_count_dict: dict, db_obj:db_adm):
     for key, value in file_sim_count_dict.items():
         #insert to db
         dbquery = "UPDATE tbl_ex_fileinfo SET simfilecount = {0} WHERE filename = '{1}';".format(value, key) 
-        db_actions.execute_non_query(db_obj.connection, dbquery)
+        execute_non_query(db_obj.connection, dbquery)
 
 
 if __name__ == '__main__':

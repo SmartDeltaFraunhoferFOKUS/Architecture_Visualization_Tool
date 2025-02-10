@@ -1,8 +1,8 @@
 from math import fabs
 from operator import truediv
 import re
-import intrepret_trace as it
-import display_graph as dp
+from  intrepret_trace import *
+from  display_graph import *
 #import build_diagram_abs as build_diagram
 
 class seq2diagram():
@@ -17,7 +17,7 @@ class seq2diagram():
                 print("Line:", i)
                 '''Check if the line is properly formatted. 
                     Everything that does not satisfy the format is ignored and is not considered as a valid log line'''
-                m = re.match(it.trace_pattern, lines[i]) # a line has a trigger i.e. a -trigger-> b
+                m = re.match(trace_pattern, lines[i]) # a line has a trigger i.e. a -trigger-> b
                 message_source = []
                 message_target = []                                
                 if(m is not None):                    
@@ -106,7 +106,7 @@ class seq2diagram():
                     print("no trigger:", lines[i])
                     expressions = re.split("\s+", lines[i])
                     for expression in expressions:                                                 
-                         m = re.match(it.trace_pattern_state, expression) 
+                         m = re.match(trace_pattern_state, expression) 
                          #if there is state change, then get the final (current state) i.e in a.s1- a.s2+, get a.s2
                          if (m is not None):                  
                            m_dict = m.groupdict()
@@ -143,7 +143,7 @@ class seq2diagram():
         final_statements = []
         for i in range(0, len(complete_mermaid_statements)): #there is no need to read the last line
             current_statement = complete_mermaid_statements[i]            
-            m1 = re.match(it.trace_pattern_mermaid, current_statement)
+            m1 = re.match(trace_pattern_mermaid, current_statement)
             if(m1 is not None):                
                 match_dict_source = m1.groupdict()
                 current_source_actor = match_dict_source["actor_1"]
@@ -156,7 +156,7 @@ class seq2diagram():
                     if (j>= len(complete_mermaid_statements)):
                         break                 
                     next_statement = complete_mermaid_statements[j]
-                    m2 =  re.match(it.trace_pattern_mermaid, next_statement)
+                    m2 =  re.match(trace_pattern_mermaid, next_statement)
                     j= j+1
                 if m2 is not None:
                     match_dict_next = m2.groupdict()

@@ -1,7 +1,7 @@
 import json
 import requests
 from requests.auth import HTTPBasicAuth
-from .get_post_dashboard import *
+from get_post_dashboard import *
 
 mermaid_file_location_default = r"results/mermaid_log_states.mmd"
 

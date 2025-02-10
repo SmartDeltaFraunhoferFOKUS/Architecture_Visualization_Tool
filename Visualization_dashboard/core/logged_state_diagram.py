@@ -16,7 +16,7 @@ def draw_logged_state_diagram(filename: str, db_obj: db_actions.db_adm):
     """
     dbquery = "SELECT svg_data FROM tbl_viz_state_diagram s, (select fileid FROM tbl_ex_fileinfo f WHERE filename = '{0}') f WHERE f.fileid = s.fileid".format(filename)
     pd_df = db_actions.execute_table(db_obj.connection, dbquery)
-    svg_content = pd_df['svg_data'].apply(lambda x: x.decode('utf-8') if x else None)
+    svg_content = pd_df['svg_data'].apply(lambda x: bytes(x).decode('utf-8') if x else None)
     
     if svg_content.empty:
         st.write("No SVG data found for the selected file.")
