@@ -15,26 +15,3 @@ The general workflow is depicted below:
 
 Please follow the [wiki](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/wiki) for more details.
 
-**Note:** This is the initial version of the tool. The workflow and components may likely change over time as the development progresses
-
-## Running the Dashboard with pre-computed data
-
-To have a quick overview of the Dashboard, we have already created a database with data populated by running the diagram analysis tool on mock datasets (Knuth elevator simulation logs and simple calculator operation logs)
-
-This data can already be used to view sample visualizations via the Dashboard. 
-
-The [docker-compose](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/docker-compose.yaml) file in this directory launches two containers, 
-
-1. a mysqldb container containing the database with computed data, ready for visualization, 	
-2. a [streamlit](https://streamlit.io/) based visualization dashboard that attaches to this database.  
-
-For a demo of the Dashboard, just run:
-
-```bash
-docker-compose up --build
-```
-
-The Dashboard is then exposed to 8501 port. Access as:
-```bash
-http://localhost:8501/
-```
