@@ -2,11 +2,11 @@
 
 *The repo contains the initial version of the Architectural data analysis tool.*
 
-The application takes a folder consisting of log files as input and for each file, computes necessary visualization data and populates it in a mysql backend. 
+The application takes a folder consisting of log files as input and for each file, computes necessary visualization data and populates it in a POSTGRES backend. 
 
 The workflow is as shown in the figure below:
 
-<img src= "https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/_img/diagram_analysis.png" width="750" height="400">
+<img src= "https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/Version_latest/_img/diagram_analysis.png" width="750" height="400">
 
 Please follow the following steps to setup and get the app running:
 

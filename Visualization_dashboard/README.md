@@ -4,12 +4,12 @@ The Dashboard uses the data populated by the [Data analysis tool](https://github
 
 The workflow is as below:
 
-<img src= "https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/_img/visualization_dashboard.png" width="550" height="200">
+<img src= "https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/Version_latest/_img/visualization_dashboard.png" width="550" height="200">
 
 ### Pre-requisites before running the app:
 1. Populate necessary data using the [Data analysis tool](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/tree/master/Data_analysis_tool). The relevant information can be found in the corresponding [readme](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/Data_analysis_tool/README.md)
 
-    However, if you want to run the Visualization with pre-populated data and without having to run the Data population tool, please run the [smartdelta__pcd_restore_all.sql](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/Data_analysis_tool/db_scripts/complete_data_backup/smartdelta__pcd_restore_all.sql) script. This will completely create a pre-populated database called **SmartDelta__PCD** in the mysql db.
+    However, if you want to run the Visualization with pre-populated data and without having to run the Data population tool, please run the [smartdelta__pcd_restore_all.sql](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/Data_analysis_tool/db_scripts/complete_data_backup/smartdelta__pcd_restore_all.sql) script. This will completely create a pre-populated database called **SmartDelta_PCD** in the POSTGRES db.
 
 2. Configure database settings in the [config.yaml](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool/blob/master/Visualization_dashboard/config.yaml) file.
 
@@ -44,8 +44,3 @@ The workflow is as below:
        http://localhost:8501/
     ```
 
-### To deploy in a container using pre-populated data:
-
-There is also a docker-compose that already deploys the visualization dashboard container along with a mysql db container with per-populated data. Please follow the [readme](https://github.com/SmartDeltaFraunhoferFOKUS/Architecture_Visualization_Tool#running-the-dashboard-with-pre-computed-data) to initiate this setup.
-
-**In this case, the pre-requisites are not necessary**
